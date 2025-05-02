@@ -1,7 +1,7 @@
 # Solving Questions With Brainpower
 
 **Difficulty:** Medium  
-**URL:** [https://leetcode.com/problems/solving-questions-with-brainpower](https://leetcode.com/problems/solving-questions-with-brainpower)  
+**URL:** [https://leetcode.com/problems/solving-questions-with-brainpower/](https://leetcode.com/problems/solving-questions-with-brainpower/)  
 **Tags:** Array, Dynamic Programming
 
 ---
