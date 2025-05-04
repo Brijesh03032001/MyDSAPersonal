@@ -2,21 +2,24 @@ class Solution {
 public:
     long long maximumTripletValue(vector<int>& nums) {
         int n = nums.size();
-        long long maxTriplet = LLONG_MIN;
+        if (n < 3) return 0; // Not enough elements for a triplet
 
-        // Brute force O(n³) approach
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
-                for (int k = j + 1; k < n; k++) {
-                    long long diff = (long long)(nums[i] - nums[j]) * (long long)nums[k];
+        long long maxVal = 0;
+        int maxPrefix = nums[0]; // Maximum value seen so far
+        vector<int> maxSuffix(n, 0);
 
-                    // Update maxTriplet if we find a larger value
-                    maxTriplet = std::max(maxTriplet, diff);
-                }
-            }
+        // Compute max suffix values
+        maxSuffix[n-1] = nums[n-1];
+        for (int i = n-2; i >= 0; i--) {
+            maxSuffix[i] = max(maxSuffix[i+1], nums[i]);
         }
 
-        // If maxTriplet is negative, return 0 (as per problem constraints)
-        return maxTriplet > 0 ? maxTriplet : 0;
+        // Iterate over the middle element
+        for (int j = 1; j < n-1; j++) {
+            maxVal = max(maxVal, (long long)(maxPrefix - nums[j]) * maxSuffix[j+1]);
+            maxPrefix = max(maxPrefix, nums[j]);
+        }
+
+        return maxVal;
     }
 };
