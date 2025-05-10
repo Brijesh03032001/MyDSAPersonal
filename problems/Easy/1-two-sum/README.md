@@ -1,7 +1,7 @@
 # Two Sum
 
 **Difficulty:** Easy  
-**URL:** [https://leetcode.com/problems/two-sum](https://leetcode.com/problems/two-sum)  
+**URL:** [https://leetcode.com/problems/two-sum/](https://leetcode.com/problems/two-sum/)  
 **Tags:** Array, Hash Table
 
 ---
