@@ -34,7 +34,7 @@ public:
                 {
                     counted_req ++;
                 }
-                 vc[s[i]- 'A']++;
+                vc[s[i]- 'A']++;
                 i++;
             }
             j++;
