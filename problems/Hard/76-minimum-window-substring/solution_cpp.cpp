@@ -15,7 +15,7 @@ public:
         while(j < le)
         {
             
-            if( vc[s[j] - 'A'] > 0)
+            if(vc[s[j]- 'A'] > 0)
             {
                 counted_req --;
 
@@ -30,11 +30,11 @@ public:
                     start_i  = i;
                     windowSize = te;
                 }
-                if(vc[s[i]- 'A'] >= 0)
+                vc[s[i]- 'A']++;
+                if(vc[s[i]- 'A'] > 0)
                 {
                     counted_req ++;
                 }
-                vc[s[i]- 'A']++;
                 i++;
             }
             j++;
