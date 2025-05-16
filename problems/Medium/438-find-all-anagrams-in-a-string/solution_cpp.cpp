@@ -4,7 +4,7 @@ public:
     {
         for(auto it : vc)
         {
-            if(it != 0)
+            if(it > 0)
             {
                 return false;
             }
@@ -26,12 +26,6 @@ public:
         while(p2 < le)
         {
                 all_char[txt[p2] - 'a']--;
-                // cout << "Before" << "\n";
-                // for(auto it : all_char)
-                //   {
-                //     cout << it << " " ;
-                //   }
-                //   cout << "\n";
                 if(p2 - p1 + 1 == dis )
                 {
                     if( checkAllZero(all_char))
@@ -42,12 +36,7 @@ public:
                     all_char[txt[p1] - 'a']++; 
                     p1++;
                 }
-                // cout << "After " << "\n";
-                // for(auto it : all_char)
-                //   {
-                //     cout << it << " " ;
-                //   }
-                //   cout << "\n";
+                
                 p2++;
         }
             
