@@ -1,7 +1,7 @@
 # Non-overlapping Intervals
 
 **Difficulty:** Medium  
-**URL:** [https://leetcode.com/problems/non-overlapping-intervals](https://leetcode.com/problems/non-overlapping-intervals)  
+**URL:** [https://leetcode.com/problems/non-overlapping-intervals/](https://leetcode.com/problems/non-overlapping-intervals/)  
 **Tags:** Array, Dynamic Programming, Greedy, Sorting
 
 ---
