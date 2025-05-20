@@ -1,7 +1,7 @@
 # Max Area of Island
 
 **Difficulty:** Medium  
-**URL:** [https://leetcode.com/problems/max-area-of-island](https://leetcode.com/problems/max-area-of-island)  
+**URL:** [https://leetcode.com/problems/max-area-of-island/](https://leetcode.com/problems/max-area-of-island/)  
 **Tags:** Array, Depth-First Search, Breadth-First Search, Union-Find, Matrix
 
 ---
