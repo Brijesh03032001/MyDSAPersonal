@@ -6,7 +6,7 @@ public:
 
         for(int i=0;i<s.size();i++)
         {
-                if(st.empty() || s[i] == '[' || s[i] == '{' || s[i] == '(')
+                if(st.empty() || mp.find(s[i]) == mp.end())
                 {
                        st.push(s[i]);
                 }
