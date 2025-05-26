@@ -1,7 +1,7 @@
 # Transformed Array
 
 **Difficulty:** Easy  
-**URL:** [https://leetcode.com/problems/transformed-array](https://leetcode.com/problems/transformed-array)  
+**URL:** [https://leetcode.com/problems/transformed-array/](https://leetcode.com/problems/transformed-array/)  
 **Tags:** Array, Simulation
 
 ---
