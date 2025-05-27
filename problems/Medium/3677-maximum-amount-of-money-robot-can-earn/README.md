@@ -1,7 +1,7 @@
 # Maximum Amount of Money Robot Can Earn
 
 **Difficulty:** Medium  
-**URL:** [https://leetcode.com/problems/maximum-amount-of-money-robot-can-earn](https://leetcode.com/problems/maximum-amount-of-money-robot-can-earn)  
+**URL:** [https://leetcode.com/problems/maximum-amount-of-money-robot-can-earn/](https://leetcode.com/problems/maximum-amount-of-money-robot-can-earn/)  
 **Tags:** Array, Dynamic Programming, Matrix
 
 ---
