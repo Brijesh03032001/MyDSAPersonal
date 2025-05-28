@@ -11,9 +11,8 @@ public:
 
         // Base case: If at the bottom-right corner.
         if (i == m - 1 && j == n - 1) {
-             if(power > 0 && coins[i][j] <0)
-            {
-                return 0;
+            if (coins[i][j] < 0 && power > 0) {
+                return 0; // Can't handle negative value without power.
             }
             return coins[i][j]; // Return the value of the last cell.
         }
