@@ -1,7 +1,7 @@
 # Number of Islands
 
 **Difficulty:** Medium  
-**URL:** [https://leetcode.com/problems/number-of-islands](https://leetcode.com/problems/number-of-islands)  
+**URL:** [https://leetcode.com/problems/number-of-islands/](https://leetcode.com/problems/number-of-islands/)  
 **Tags:** Array, Depth-First Search, Breadth-First Search, Union-Find, Matrix
 
 ---
