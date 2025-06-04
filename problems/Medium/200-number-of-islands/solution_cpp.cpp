@@ -7,19 +7,19 @@ public:
                 return ;
              }
              grid[i][j] = '2';   // visited bn gya hai
-              int p = pai.size();
-              for(int lp=0;lp<p;lp++)
-              {
-                int x_dir = pai[lp].first + i;
-                int y_dir = pai[lp].second + j;
-                dfs(pai,grid,m,n,x_dir, y_dir);
-              }
-        //       for(pair<int,int>noo : pai)
-        // {
-        //   int nx= noo.first + i;
-        //     int ny= noo.second + j;
-        //   dfs(pai,grid,m,n,nx,ny);
-        // }
+            //   int p = pai.size();
+            //   for(int i=0;i<p;i++)
+            //   {
+            //     int x_dir = pai[i].first + i;
+            //     int y_dir = pai[i].second + j;
+            //     dfs(pai,grid,m,n,x_dir, y_dir);
+            //   }
+              for(pair<int,int>noo : pai)
+        {
+          int nx= noo.first + i;
+            int ny= noo.second + j;
+          dfs(pai,grid,m,n,nx,ny);
+        }
 
     }
     int numIslands(vector<vector<char>>& grid) {
