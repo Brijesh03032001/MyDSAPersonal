@@ -5,9 +5,7 @@ public:
         for(int i=0;i<quantities.size();i++)
         {
             int ref = quantities[i];
-            // shops -= (ceil((double(ref)/ans)));
-            shops -= (ref + ans - 1) / ans ;
-
+            shops -= (ceil((double(ref)/ans)));
             if(shops < 0)
             {
                 return false;
