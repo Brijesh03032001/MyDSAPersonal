@@ -4,16 +4,16 @@ public:
         int maxVal = (1 << maximumBit) - 1; 
         int currentXor = 0;
         vector<int> answer(nums.size());
-        int n = nums.size() ;
+        
        
         for (int num : nums) {
             currentXor ^= num;
         }
         
        
-        for (int i = 0; i < n; ++i) {
+        for (int i = 0; i < nums.size(); ++i) {
             answer[i] = currentXor ^ maxVal; 
-            currentXor ^= nums[n - 1 - i];
+            currentXor ^= nums[nums.size() - 1 - i];
         }
         
         return answer;
