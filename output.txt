@@ -1,8 +1,1 @@
-This is the graph : 
-0 -> 1 2 
-1 -> 2 
-2 -> 0 3 
-3 -> 3 
-
-This is the BFS : 
-0 1 2 3 
+105 125 145
