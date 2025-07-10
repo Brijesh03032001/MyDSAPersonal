@@ -3,7 +3,7 @@ public:
 
    // abacc
    // a (bacc)
-    void solve(string s, int i, int currCount , int& maxCount, unordered_set<string>st , int &n)
+    void solve(string s, int i, int currCount , int& maxCount, unordered_set<string>st , int n)
     {
         if(i >= n)
         {
