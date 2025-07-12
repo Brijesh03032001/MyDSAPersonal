@@ -1,7 +1,7 @@
 # Find Kth Bit in Nth Binary String
 
 **Difficulty:** Medium  
-**URL:** [https://leetcode.com/problems/find-kth-bit-in-nth-binary-string](https://leetcode.com/problems/find-kth-bit-in-nth-binary-string)  
+**URL:** [https://leetcode.com/problems/find-kth-bit-in-nth-binary-string/](https://leetcode.com/problems/find-kth-bit-in-nth-binary-string/)  
 **Tags:** String, Recursion, Simulation
 
 ---
