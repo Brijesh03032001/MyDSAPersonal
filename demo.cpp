@@ -19,8 +19,8 @@ void solve()
     {
         int spread = prices[j] - prices[0];
         if (spread <= 0)
-            continue; 
-        
+            continue;
+
         map<int, int> counts;
         for (int price : prices)
         {
@@ -31,7 +31,7 @@ void solve()
 
         for (int i = 0; i < total_prices; ++i)
         {
-            
+
             if (counts[prices[i]] == 0)
             {
                 continue;
@@ -42,20 +42,20 @@ void solve()
 
             if (counts.count(ask) && counts[ask] > 0)
             {
-               
+
                 counts[ask]--;
                 mid_prices.push_back((long long)bid + ask); // Store sum to avoid float issues
             }
             else
             {
-             
+
                 possible = false;
                 break;
             }
         }
         if (possible && mid_prices.size() == N)
         {
-           sort(mid_prices.begin(), mid_prices.end());
+            sort(mid_prices.begin(), mid_prices.end());
             for (int i = 0; i < N; ++i)
             {
                 cout << mid_prices[i] / 2 << (i == N - 1 ? "" : " ");
