@@ -1,7 +1,7 @@
 # Task Scheduler
 
 **Difficulty:** Medium  
-**URL:** [https://leetcode.com/problems/task-scheduler](https://leetcode.com/problems/task-scheduler)  
+**URL:** [https://leetcode.com/problems/task-scheduler/](https://leetcode.com/problems/task-scheduler/)  
 **Tags:** Array, Hash Table, Greedy, Sorting, Heap (Priority Queue), Counting
 
 ---
