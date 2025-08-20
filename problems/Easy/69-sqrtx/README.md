@@ -1,7 +1,7 @@
 # Sqrt(x)
 
 **Difficulty:** Easy  
-**URL:** [https://leetcode.com/problems/sqrtx](https://leetcode.com/problems/sqrtx)  
+**URL:** [https://leetcode.com/problems/sqrtx/](https://leetcode.com/problems/sqrtx/)  
 **Tags:** Math, Binary Search
 
 ---
