@@ -1,5 +1,23 @@
-// LeetCode submission — code could not be fetched automatically.
-// To fill this in, open the submission on LeetCode and paste your code here.
-// Submission key: find-minimum-in-rotated-sorted-array__1767867327
-// Language: cpp
-// Status: Accepted
+class Solution {
+public:
+    int findMin(vector<int>& arr) {
+        int n= arr.size();
+        int lo= 0;
+        int high = n-1;
+        int k=arr[0];
+        while( lo <= high)
+        {
+            int mid = (lo+ high) / 2;
+            if(arr[0] > arr[mid])
+            {
+                k=arr[mid];
+                high = mid-1;
+            }
+            else
+            {
+                lo=  mid+ 1;
+            }
+        }
+        return k;
+    }
+};

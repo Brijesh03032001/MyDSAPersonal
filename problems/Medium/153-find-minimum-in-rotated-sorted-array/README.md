@@ -1,7 +1,7 @@
 # Find Minimum in Rotated Sorted Array
 
 **Difficulty:** Medium  
-**URL:** [https://leetcode.com/problems/find-minimum-in-rotated-sorted-array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array)  
+**URL:** [https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)  
 **Tags:** Array, Binary Search
 
 ---
