@@ -1,5 +1,20 @@
-// LeetCode submission — code could not be fetched automatically.
-// To fill this in, open the submission on LeetCode and paste your code here.
-// Submission key: kth-largest-element-in-an-array__1768807293
-// Language: cpp
-// Status: Accepted
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        priority_queue<int>pq;
+        for(int i=0;i<nums.size();i++)
+        {
+            pq.push(nums[i]);
+        }
+        int c=1;
+
+        while(!pq.empty() && c<=k-1)
+        {
+                pq.pop();
+                c++;
+        }
+        return pq.top();
+        
+        
+    }
+};
