@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Scheduling Algorithm Visualizer</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: #495057;
+            min-width: 120px;
+        }
+
+        .input-group input {
+            padding: 12px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .speed-slider {
+            width: 150px;
+        }
+
+        .visualization-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .jobs-display {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+        }
+
+        .jobs-display h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .jobs-container {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .job-block {
+            padding: 12px 16px;
+            background: #e9ecef;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 50px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .job-block.current {
+            background: #667eea;
+            color: white;
+            border-color: #5a6fd8;
+            transform: scale(1.1);
+        }
+
+        .job-block.selected {
+            background: #28a745;
+            color: white;
+            border-color: #1e7e34;
+        }
+
+        .job-block.considering {
+            background: #ffc107;
+            color: #212529;
+            border-color: #d39e00;
+        }
+
+        .memo-table {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            overflow-x: auto;
+        }
+
+        .memo-table h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .table th, .table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            font-weight: 500;
+        }
+
+        .table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        .table td.computed {
+            background: #d4edda;
+            color: #155724;
+            font-weight: 600;
+        }
+
+        .table td.current {
+            background: #fff3cd;
+            color: #856404;
+            font-weight: 600;
+        }
+
+        .recursion-tree {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            margin-bottom: 30px;
+            height: 500px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .recursion-tree h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .tree-container {
+            width: 100%;
+            height: 450px;
+            overflow: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .tree-node {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px 0;
+            margin-left: var(--depth, 0px);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .tree-node.active {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: translateX(5px);
+        }
+
+        .tree-node.completed {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        /* D3 Tree Styles */
+        .node {
+            cursor: pointer;
+        }
+
+        .node circle {
+            fill: #fff;
+            stroke: #667eea;
+            stroke-width: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .node.active circle {
+            fill: #667eea;
+            stroke: #5a6fd8;
+            stroke-width: 3px;
+            r: 8;
+        }
+
+        .node.completed circle {
+            fill: #28a745;
+            stroke: #1e7e34;
+            stroke-width: 2px;
+        }
+
+        .node.memoized circle {
+            fill: #ffc107;
+            stroke: #d39e00;
+            stroke-width: 2px;
+        }
+
+        .node text {
+            font: 12px sans-serif;
+            font-weight: 600;
+            fill: #495057;
+        }
+
+        .node.active text {
+            fill: white;
+            font-weight: bold;
+        }
+
+        .node.completed text {
+            fill: white;
+            font-weight: bold;
+        }
+
+        .node.memoized text {
+            fill: #212529;
+            font-weight: bold;
+        }
+
+        .link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .link.active {
+            stroke: #667eea;
+            stroke-width: 3px;
+        }
+
+        .tree-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            justify-content: center;
+        }
+
+        .tree-btn {
+            padding: 6px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .tree-btn:hover {
+            background: #f8f9fa;
+            border-color: #667eea;
+        }
+
+        .tree-legend {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-circle {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid;
+        }
+
+        .legend-circle.pending {
+            background: white;
+            border-color: #667eea;
+        }
+
+        .legend-circle.active {
+            background: #667eea;
+            border-color: #5a6fd8;
+        }
+
+        .legend-circle.completed {
+            background: #28a745;
+            border-color: #1e7e34;
+        }
+
+        .legend-circle.memoized {
+            background: #ffc107;
+            border-color: #d39e00;
+        }
+
+        .step-info {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #2196f3;
+            margin-bottom: 30px;
+        }
+
+        .step-info h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .step-info p {
+            color: #424242;
+            line-height: 1.6;
+        }
+
+        .result-section {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .result-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .result-section .result-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .algorithm-explanation {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .algorithm-explanation h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .algorithm-explanation ul {
+            color: #856404;
+            padding-left: 20px;
+        }
+
+        .algorithm-explanation li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .visualization-area {
+                grid-template-columns: 1fr;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .input-group label {
+                min-width: auto;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .day-partition {
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 8px;
+            margin: 4px;
+            display: inline-block;
+        }
+
+        .partition-display {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            margin-bottom: 20px;
+        }
+
+        .partition-display h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .current-partition {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Job Scheduling Algorithm Visualizer</h1>
+            <p>Interactive visualization of Dynamic Programming solution for Minimum Difficulty Job Scheduling</p>
+        </div>
+
+        <div class="content">
+            <div class="algorithm-explanation">
+                <h3>📋 Algorithm Overview</h3>
+                <ul>
+                    <li><strong>Problem:</strong> Schedule jobs over d days to minimize total difficulty</li>
+                    <li><strong>Constraint:</strong> Must complete at least one job per day</li>
+                    <li><strong>Daily Difficulty:</strong> Maximum difficulty among jobs done that day</li>
+                    <li><strong>Approach:</strong> Dynamic Programming with Memoization</li>
+                    <li><strong>State:</strong> memo[i][d] = min difficulty starting from job i with d days left</li>
+                </ul>
+            </div>
+
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="jobDifficulties">Job Difficulties:</label>
+                    <input type="text" id="jobDifficulties" placeholder="Enter comma-separated values (e.g., 6,5,4,3,2,1)" value="6,5,4,3,2,1">
+                </div>
+                <div class="input-group">
+                    <label for="numDays">Number of Days:</label>
+                    <input type="number" id="numDays" min="1" max="10" value="2">
+                </div>
+                <div class="input-group">
+                    <label>Animation Speed:</label>
+                    <div class="speed-control">
+                        <span>Slow</span>
+                        <input type="range" id="speedSlider" class="speed-slider" min="1" max="10" value="5">
+                        <span>Fast</span>
+                        <span id="speedValue">5x</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="startBtn" class="btn btn-primary">🚀 Start Visualization</button>
+                <button id="pauseBtn" class="btn btn-warning" disabled>⏸️ Pause</button>
+                <button id="resumeBtn" class="btn btn-success" disabled>▶️ Resume</button>
+                <button id="resetBtn" class="btn btn-secondary">🔄 Reset</button>
+                <button id="stepBtn" class="btn btn-secondary" disabled>👣 Next Step</button>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <div class="step-info" id="stepInfo">
+                <h3>🔍 Current Step</h3>
+                <p>Click "Start Visualization" to begin the algorithm demonstration.</p>
+            </div>
+
+            <div class="visualization-area">
+                <div class="jobs-display">
+                    <h3>📊 Job Difficulties</h3>
+                    <div class="jobs-container" id="jobsContainer">
+                        <!-- Jobs will be displayed here -->
+                    </div>
+                </div>
+
+                <div class="memo-table">
+                    <h3>🧠 Memoization Table</h3>
+                    <table class="table" id="memoTable">
+                        <!-- Memoization table will be generated here -->
+                    </table>
+                </div>
+            </div>
+
+            <div class="partition-display">
+                <h3>📅 Current Day Partitioning</h3>
+                <div class="current-partition" id="currentPartition">
+                    <!-- Current partition will be shown here -->
+                </div>
+            </div>
+
+            <div class="recursion-tree">
+                <h3>🌳 Recursive Call Tree</h3>
+                <div class="tree-controls">
+                    <button class="tree-btn" id="expandAllBtn">Expand All</button>
+                    <button class="tree-btn" id="collapseAllBtn">Collapse All</button>
+                    <button class="tree-btn" id="centerTreeBtn">Center Tree</button>
+                    <button class="tree-btn" id="fitTreeBtn">Fit to View</button>
+                </div>
+                <div class="tree-container">
+                    <svg id="treeVisualization" width="100%" height="100%"></svg>
+                </div>
+                <div class="tree-legend">
+                    <div class="legend-item">
+                        <div class="legend-circle pending"></div>
+                        <span>Pending</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-circle active"></div>
+                        <span>Active</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-circle completed"></div>
+                        <span>Completed</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-circle memoized"></div>
+                        <span>Memoized</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <h3>🎉 Final Result</h3>
+                <div class="result-value" id="finalResult">-</div>
+                <p>Minimum Difficulty Job Schedule</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class JobSchedulerVisualizer {
+            constructor() {
+                this.jobs = [];
+                this.numDays = 0;
+                this.memo = {};
+                this.steps = [];
+                this.currentStep = 0;
+                this.isRunning = false;
+                this.isPaused = false;
+                this.speed = 5;
+                this.recursionStack = [];
+                this.totalSteps = 0;
+                this.treeData = null;
+                this.treeNodes = new Map();
+                this.svg = null;
+                this.treeGroup = null;
+                this.zoom = null;
+                
+                this.initializeEventListeners();
+                this.updateSpeedDisplay();
+                this.initializeTree();
+            }
+
+            initializeEventListeners() {
+                document.getElementById('startBtn').addEventListener('click', () => this.startVisualization());
+                document.getElementById('pauseBtn').addEventListener('click', () => this.pauseVisualization());
+                document.getElementById('resumeBtn').addEventListener('click', () => this.resumeVisualization());
+                document.getElementById('resetBtn').addEventListener('click', () => this.resetVisualization());
+                document.getElementById('stepBtn').addEventListener('click', () => this.nextStep());
+                document.getElementById('speedSlider').addEventListener('input', (e) => this.updateSpeed(e.target.value));
+                
+                // Tree control buttons
+                document.getElementById('expandAllBtn').addEventListener('click', () => this.expandAllNodes());
+                document.getElementById('collapseAllBtn').addEventListener('click', () => this.collapseAllNodes());
+                document.getElementById('centerTreeBtn').addEventListener('click', () => this.centerTree());
+                document.getElementById('fitTreeBtn').addEventListener('click', () => this.fitTreeToView());
+            }
+
+            initializeTree() {
+                const container = document.querySelector('.tree-container');
+                const containerRect = container.getBoundingClientRect();
+                
+                this.svg = d3.select('#treeVisualization')
+                    .attr('width', containerRect.width)
+                    .attr('height', containerRect.height);
+
+                // Create zoom behavior
+                this.zoom = d3.zoom()
+                    .scaleExtent([0.1, 3])
+                    .on('zoom', (event) => {
+                        this.treeGroup.attr('transform', event.transform);
+                    });
+
+                this.svg.call(this.zoom);
+
+                // Create main group for tree
+                this.treeGroup = this.svg.append('g')
+                    .attr('class', 'tree-group');
+
+                // Add background rectangle for zoom events
+                this.svg.append('rect')
+                    .attr('width', '100%')
+                    .attr('height', '100%')
+                    .style('fill', 'none')
+                    .style('pointer-events', 'all');
+            }
+
+            updateSpeed(value) {
+                this.speed = parseInt(value);
+                this.updateSpeedDisplay();
+            }
+
+            updateSpeedDisplay() {
+                document.getElementById('speedValue').textContent = `${this.speed}x`;
+            }
+
+            getAnimationDelay() {
+                return 2000 / this.speed; // Inverse relationship: higher speed = shorter delay
+            }
+
+            parseInput() {
+                const jobInput = document.getElementById('jobDifficulties').value;
+                const daysInput = document.getElementById('numDays').value;
+
+                this.jobs = jobInput.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x));
+                this.numDays = parseInt(daysInput);
+
+                if (this.jobs.length === 0) {
+                    alert('Please enter valid job difficulties');
+                    return false;
+                }
+
+                if (this.numDays < 1 || this.numDays > this.jobs.length) {
+                    alert('Number of days must be between 1 and number of jobs');
+                    return false;
+                }
+
+                return true;
+            }
+
+            startVisualization() {
+                if (!this.parseInput()) return;
+
+                this.resetVisualization();
+                this.generateSteps();
+                this.displayJobs();
+                this.createMemoTable();
+                this.isRunning = true;
+                this.updateControls();
+                this.runAnimation();
+            }
+
+            generateSteps() {
+                this.memo = {};
+                this.steps = [];
+                this.recursionStack = [];
+                
+                // Generate all steps by running the algorithm
+                this.solve(0, this.numDays, this.jobs, 0);
+                this.totalSteps = this.steps.length;
+            }
+
+            solve(i, d, jobs, depth) {
+                const n = jobs.length;
+                const key = `${i},${d}`;
+
+                this.steps.push({
+                    type: 'function_call',
+                    i: i,
+                    d: d,
+                    depth: depth,
+                    description: `Solving subproblem: jobs[${i}:] with ${d} days remaining`
+                });
+
+                // Check memoization
+                if (this.memo[key] !== undefined) {
+                    this.steps.push({
+                        type: 'memo_hit',
+                        i: i,
+                        d: d,
+                        value: this.memo[key],
+                        description: `Found memoized result: ${this.memo[key]}`
+                    });
+                    return this.memo[key];
+                }
+
+                // Base case: only one day left
+                if (d === 1) {
+                    const maxDifficulty = Math.max(...jobs.slice(i));
+                    this.memo[key] = maxDifficulty;
+                    
+                    this.steps.push({
+                        type: 'base_case',
+                        i: i,
+                        d: d,
+                        value: maxDifficulty,
+                        jobs: jobs.slice(i),
+                        description: `Base case: 1 day left, max difficulty = ${maxDifficulty}`
+                    });
+                    
+                    return maxDifficulty;
+                }
+
+                let minTotalDifficulty = Infinity;
+                let bestPartition = [];
+
+                // Try all possible partitions
+                for (let k = i; k <= n - d; k++) {
+                    this.steps.push({
+                        type: 'partition_try',
+                        i: i,
+                        d: d,
+                        k: k,
+                        description: `Trying partition: jobs[${i}:${k}] for today`
+                    });
+
+                    const maxDifficultyToday = Math.max(...jobs.slice(i, k + 1));
+                    const futureDifficulty = this.solve(k + 1, d - 1, jobs, depth + 1);
+
+                    if (futureDifficulty !== -1) {
+                        const totalDifficulty = maxDifficultyToday + futureDifficulty;
+                        
+                        this.steps.push({
+                            type: 'partition_evaluate',
+                            i: i,
+                            d: d,
+                            k: k,
+                            todayDifficulty: maxDifficultyToday,
+                            futureDifficulty: futureDifficulty,
+                            totalDifficulty: totalDifficulty,
+                            description: `Today: ${maxDifficultyToday}, Future: ${futureDifficulty}, Total: ${totalDifficulty}`
+                        });
+
+                        if (totalDifficulty < minTotalDifficulty) {
+                            minTotalDifficulty = totalDifficulty;
+                            bestPartition = [i, k];
+                            
+                            this.steps.push({
+                                type: 'new_best',
+                                i: i,
+                                d: d,
+                                k: k,
+                                value: minTotalDifficulty,
+                                description: `New best solution found: ${minTotalDifficulty}`
+                            });
+                        }
+                    }
+                }
+
+                const result = minTotalDifficulty === Infinity ? -1 : minTotalDifficulty;
+                this.memo[key] = result;
+
+                this.steps.push({
+                    type: 'memo_store',
+                    i: i,
+                    d: d,
+                    value: result,
+                    bestPartition: bestPartition,
+                    description: `Stored result: memo[${i}][${d}] = ${result}`
+                });
+
+                return result;
+            }
+
+            // D3.js Tree Visualization Methods
+            updateTreeVisualization() {
+                if (!this.treeData) return;
+
+                const width = this.svg.node().getBoundingClientRect().width;
+                const height = this.svg.node().getBoundingClientRect().height;
+
+                // Create tree layout
+                const treeLayout = d3.tree()
+                    .size([height - 100, width - 200])
+                    .separation((a, b) => a.parent === b.parent ? 1 : 2);
+
+                // Create hierarchy
+                const root = d3.hierarchy(this.treeData);
+                const treeNodes = treeLayout(root);
+
+                // Update links
+                const links = this.treeGroup.selectAll('.tree-link')
+                    .data(treeNodes.links(), d => `${d.source.data.id}-${d.target.data.id}`);
+
+                links.exit().remove();
+
+                const linkEnter = links.enter()
+                    .append('path')
+                    .attr('class', 'tree-link')
+                    .attr('d', d3.linkHorizontal()
+                        .x(d => d.y + 100)
+                        .y(d => d.x + 50));
+
+                links.merge(linkEnter)
+                    .attr('d', d3.linkHorizontal()
+                        .x(d => d.y + 100)
+                        .y(d => d.x + 50));
+
+                // Update nodes
+                const nodes = this.treeGroup.selectAll('.tree-node')
+                    .data(treeNodes.descendants(), d => d.data.id);
+
+                nodes.exit().remove();
+
+                const nodeEnter = nodes.enter()
+                    .append('g')
+                    .attr('class', 'tree-node')
+                    .attr('transform', d => `translate(${d.y + 100}, ${d.x + 50})`)
+                    .on('click', (event, d) => this.toggleNode(d));
+
+                nodeEnter.append('circle')
+                    .attr('r', 20);
+
+                nodeEnter.append('text')
+                    .attr('class', 'node-label')
+                    .attr('text-anchor', 'middle')
+                    .attr('dy', '0.35em')
+                    .text(d => `${d.data.i},${d.data.d}`);
+
+                nodeEnter.append('text')
+                    .attr('class', 'node-result')
+                    .attr('text-anchor', 'middle')
+                    .attr('dy', '-25px')
+                    .style('font-size', '10px');
+
+                const nodeUpdate = nodes.merge(nodeEnter);
+
+                nodeUpdate
+                    .transition()
+                    .duration(300)
+                    .attr('transform', d => `translate(${d.y + 100}, ${d.x + 50})`);
+
+                nodeUpdate.select('circle')
+                    .attr('class', d => `tree-node-circle ${d.data.state || 'exploring'}${d.data.memoized ? ' memoized' : ''}`);
+
+                nodeUpdate.select('.node-result')
+                    .text(d => d.data.result !== undefined ? `R: ${d.data.result}` : '');
+            }
+
+            createTreeNode(step) {
+                if (!this.treeData) {
+                    this.treeData = {
+                        id: `${step.i}-${step.d}`,
+                        i: step.i,
+                        d: step.d,
+                        children: [],
+                        state: 'exploring',
+                        memoized: false,
+                        depth: step.depth || 0
+                    };
+                    this.treeNodes.set(this.treeData.id, this.treeData);
+                    return this.treeData;
+                }
+
+                const nodeId = `${step.i}-${step.d}`;
+                if (this.treeNodes.has(nodeId)) {
+                    return this.treeNodes.get(nodeId);
+                }
+
+                // Find parent node
+                const parentDepth = (step.depth || 0) - 1;
+                let parentNode = null;
+                
+                for (let [id, node] of this.treeNodes) {
+                    if (node.depth === parentDepth) {
+                        parentNode = node;
+                        break;
+                    }
+                }
+
+                if (!parentNode) {
+                    parentNode = this.treeData;
+                }
+
+                const newNode = {
+                    id: nodeId,
+                    i: step.i,
+                    d: step.d,
+                    children: [],
+                    state: 'exploring',
+                    memoized: false,
+                    depth: step.depth || 0,
+                    parent: parentNode
+                };
+
+                parentNode.children.push(newNode);
+                this.treeNodes.set(nodeId, newNode);
+                
+                return newNode;
+            }
+
+            updateTreeNodeState(step) {
+                const nodeId = `${step.i}-${step.d}`;
+                const node = this.treeNodes.get(nodeId);
+                
+                if (node) {
+                    switch (step.type) {
+                        case 'memo_hit':
+                            node.state = 'memoized';
+                            node.memoized = true;
+                            node.result = step.value;
+                            break;
+                        case 'base_case':
+                            node.state = 'base_case';
+                            node.result = step.value;
+                            break;
+                        case 'memo_store':
+                            node.state = 'completed';
+                            node.result = step.value;
+                            break;
+                        case 'function_call':
+                            node.state = 'exploring';
+                            break;
+                    }
+                    this.updateTreeVisualization();
+                }
+            }
+
+            toggleNode(d) {
+                if (d.children) {
+                    d._children = d.children;
+                    d.children = null;
+                } else {
+                    d.children = d._children;
+                    d._children = null;
+                }
+                this.updateTreeVisualization();
+            }
+
+            expandAllNodes() {
+                if (!this.treeData) return;
+
+                function expand(d) {
+                    if (d._children) {
+                        d.children = d._children;
+                        d._children = null;
+                    }
+                    if (d.children) {
+                        d.children.forEach(expand);
+                    }
+                }
+
+                const root = d3.hierarchy(this.treeData);
+                root.descendants().forEach(expand);
+                this.updateTreeVisualization();
+            }
+
+            collapseAllNodes() {
+                if (!this.treeData) return;
+
+                function collapse(d) {
+                    if (d.children) {
+                        d._children = d.children;
+                        d.children = null;
+                        d._children.forEach(collapse);
+                    }
+                }
+
+                const root = d3.hierarchy(this.treeData);
+                root.children && root.children.forEach(collapse);
+                this.updateTreeVisualization();
+            }
+
+            centerTree() {
+                if (!this.treeData) return;
+
+                const bounds = this.treeGroup.node().getBBox();
+                const width = this.svg.node().getBoundingClientRect().width;
+                const height = this.svg.node().getBoundingClientRect().height;
+
+                const scale = 0.8 / Math.max(bounds.width / width, bounds.height / height);
+                const translate = [width / 2 - scale * (bounds.x + bounds.width / 2), 
+                                 height / 2 - scale * (bounds.y + bounds.height / 2)];
+
+                this.svg.transition()
+                    .duration(750)
+                    .call(this.zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
+            }
+
+            fitTreeToView() {
+                if (!this.treeData) return;
+
+                const bounds = this.treeGroup.node().getBBox();
+                const width = this.svg.node().getBoundingClientRect().width;
+                const height = this.svg.node().getBoundingClientRect().height;
+
+                const scale = 0.9 / Math.max(bounds.width / width, bounds.height / height);
+                const translate = [width / 2 - scale * (bounds.x + bounds.width / 2), 
+                                 height / 2 - scale * (bounds.y + bounds.height / 2)];
+
+                this.svg.transition()
+                    .duration(750)
+                    .call(this.zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
+            }
+
+            async runAnimation() {
+                this.currentStep = 0;
+                
+                while (this.currentStep < this.steps.length && this.isRunning) {
+                    if (!this.isPaused) {
+                        await this.executeStep(this.steps[this.currentStep]);
+                        this.currentStep++;
+                        this.updateProgress();
+                    }
+                    await this.sleep(this.getAnimationDelay());
+                }
+
+                if (this.isRunning) {
+                    this.showFinalResult();
+                }
+            }
+
+            async executeStep(step) {
+                this.updateStepInfo(step);
+                this.highlightCurrentCall(step);
+                
+                // Create or update tree node
+                if (step.type === 'function_call') {
+                    this.createTreeNode(step);
+                }
+                
+                this.updateTreeNodeState(step);
+                this.updateMemoTable(step);
+                this.updateJobsDisplay(step);
+                this.updatePartitionDisplay(step);
+            }
+
+            updateStepInfo(step) {
+                const stepInfo = document.getElementById('stepInfo');
+                stepInfo.querySelector('h3').textContent = `🔍 Step ${this.currentStep + 1}/${this.totalSteps}: ${step.type.replace('_', ' ').toUpperCase()}`;
+                stepInfo.querySelector('p').textContent = step.description;
+            }
+
+            highlightCurrentCall(step) {
+                // Remove previous highlights
+                document.querySelectorAll('.job-block').forEach(block => {
+                    block.classList.remove('current', 'selected', 'considering');
+                });
+
+                // Highlight current range
+                if (step.i !== undefined) {
+                    for (let idx = step.i; idx < this.jobs.length; idx++) {
+                        const block = document.querySelector(`[data-job-index="${idx}"]`);
+                        if (block) {
+                            if (step.type === 'partition_try' && step.k !== undefined && idx <= step.k) {
+                                block.classList.add('considering');
+                            } else if (idx === step.i) {
+                                block.classList.add('current');
+                            }
+                        }
+                    }
+                }
+            }
+
+            updateMemoTable(step) {
+                if (step.type === 'memo_store' || step.type === 'memo_hit' || step.type === 'base_case') {
+                    const cell = document.querySelector(`[data-memo-cell="${step.i},${step.d}"]`);
+                    if (cell) {
+                        cell.textContent = step.value;
+                        cell.classList.add(step.type === 'memo_hit' ? 'current' : 'computed');
+                        
+                        setTimeout(() => {
+                            cell.classList.remove('current');
+                        }, this.getAnimationDelay());
+                    }
+                }
+            }
+
+            updateJobsDisplay(step) {
+                const container = document.getElementById('jobsContainer');
+                container.innerHTML = '';
+
+                this.jobs.forEach((difficulty, index) => {
+                    const block = document.createElement('div');
+                    block.className = 'job-block';
+                    block.textContent = difficulty;
+                    block.setAttribute('data-job-index', index);
+                    
+                    if (step.i !== undefined && index >= step.i) {
+                        if (step.type === 'partition_try' && step.k !== undefined && index <= step.k) {
+                            block.classList.add('considering');
+                        } else if (index === step.i) {
+                            block.classList.add('current');
+                        }
+                    }
+                    
+                    container.appendChild(block);
+                });
+            }
+
+            updatePartitionDisplay(step) {
+                const container = document.getElementById('currentPartition');
+                
+                if (step.type === 'partition_try' && step.k !== undefined) {
+                    container.innerHTML = '';
+                    
+                    const dayDiv = document.createElement('div');
+                    dayDiv.className = 'day-partition';
+                    dayDiv.innerHTML = `<strong>Day ${this.numDays - step.d + 1}:</strong> Jobs [${step.i}-${step.k}] = [${this.jobs.slice(step.i, step.k + 1).join(', ')}]`;
+                    container.appendChild(dayDiv);
+                }
+            }
+
+            updateRecursionTree(step) {
+                const container = document.getElementById('recursionTree');
+                
+                if (step.type === 'function_call') {
+                    const node = document.createElement('div');
+                    node.className = 'tree-node active';
+                    node.style.setProperty('--depth', `${step.depth * 20}px`);
+                    node.innerHTML = `solve(${step.i}, ${step.d}) - ${step.description}`;
+                    node.setAttribute('data-call', `${step.i},${step.d}`);
+                    container.appendChild(node);
+                } else if (step.type === 'memo_store') {
+                    const existingNode = document.querySelector(`[data-call="${step.i},${step.d}"]`);
+                    if (existingNode) {
+                        existingNode.classList.remove('active');
+                        existingNode.classList.add('completed');
+                        existingNode.innerHTML += ` → Result: ${step.value}`;
+                    }
+                }
+            }
+
+            createMemoTable() {
+                const table = document.getElementById('memoTable');
+                table.innerHTML = '';
+
+                // Create header
+                const headerRow = document.createElement('tr');
+                headerRow.innerHTML = '<th>i\\d</th>';
+                for (let d = 1; d <= this.numDays; d++) {
+                    headerRow.innerHTML += `<th>${d}</th>`;
+                }
+                table.appendChild(headerRow);
+
+                // Create rows
+                for (let i = 0; i < this.jobs.length; i++) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<th>${i}</th>`;
+                    
+                    for (let d = 1; d <= this.numDays; d++) {
+                        const cell = document.createElement('td');
+                        cell.textContent = '-';
+                        cell.setAttribute('data-memo-cell', `${i},${d}`);
+                        row.appendChild(cell);
+                    }
+                    
+                    table.appendChild(row);
+                }
+            }
+
+            displayJobs() {
+                this.updateJobsDisplay({});
+            }
+
+            updateProgress() {
+                const progress = (this.currentStep / this.totalSteps) * 100;
+                document.getElementById('progressFill').style.width = `${progress}%`;
+            }
+
+            showFinalResult() {
+                const result = this.memo['0,' + this.numDays];
+                document.getElementById('finalResult').textContent = result;
+                document.getElementById('resultSection').style.display = 'block';
+                
+                this.isRunning = false;
+                this.updateControls();
+            }
+
+            pauseVisualization() {
+                this.isPaused = true;
+                this.updateControls();
+            }
+
+            resumeVisualization() {
+                this.isPaused = false;
+                this.updateControls();
+            }
+
+            resetVisualization() {
+                this.isRunning = false;
+                this.isPaused = false;
+                this.currentStep = 0;
+                this.steps = [];
+                this.memo = {};
+                this.recursionStack = [];
+                
+                // Reset tree data
+                this.treeData = null;
+                this.treeNodes.clear();
+                if (this.treeGroup) {
+                    this.treeGroup.selectAll('*').remove();
+                }
+                
+                document.getElementById('resultSection').style.display = 'none';
+                document.getElementById('progressFill').style.width = '0%';
+                
+                // Clear current partition display
+                const currentPartition = document.getElementById('currentPartition');
+                if (currentPartition) {
+                    currentPartition.innerHTML = '';
+                }
+                
+                document.getElementById('stepInfo').querySelector('p').textContent = 'Click "Start Visualization" to begin the algorithm demonstration.';
+                
+                this.updateControls();
+            }
+
+            nextStep() {
+                if (this.currentStep < this.steps.length) {
+                    this.executeStep(this.steps[this.currentStep]);
+                    this.currentStep++;
+                    this.updateProgress();
+                    
+                    if (this.currentStep >= this.steps.length) {
+                        this.showFinalResult();
+                    }
+                }
+            }
+
+            updateControls() {
+                document.getElementById('startBtn').disabled = this.isRunning;
+                document.getElementById('pauseBtn').disabled = !this.isRunning || this.isPaused;
+                document.getElementById('resumeBtn').disabled = !this.isRunning || !this.isPaused;
+                document.getElementById('stepBtn').disabled = this.isRunning && !this.isPaused;
+            }
+
+            sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+
+        // Initialize the visualizer when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new JobSchedulerVisualizer();
+        });
+    </script>
+</body>
+</html>
