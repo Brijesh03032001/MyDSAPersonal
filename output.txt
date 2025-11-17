@@ -1,9 +1,1 @@
-ale
-a***3
-aple
-p***4
-monkey
-n***6
-plea
-a***4
-a
+Alice: 10 Bob: 16

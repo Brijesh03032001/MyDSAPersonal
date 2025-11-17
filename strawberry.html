@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍒 Cherry Pickup - Advanced Algorithm Visualizer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --dark-gradient: linear-gradient(135deg, #434343 0%, #000000 100%);
+            
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #16213e;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --accent: #00d4ff;
+            --accent-secondary: #ff6b6b;
+            
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-hard: 0 20px 60px rgba(0, 0, 0, 0.4);
+            --border-radius: 24px;
+            --border-radius-sm: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            background-image: 
+                radial-gradient(circle at 20% 80%, #667eea33 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, #764ba233 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, #00d4ff22 0%, transparent 50%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--text-primary);
+        }
+
+        /* Main Layout */
+        .app-container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .sidebar {
+            width: 350px;
+            background: var(--bg-secondary);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 24px;
+            overflow-y: auto;
+            backdrop-filter: blur(20px);
+            z-index: 10;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .header-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+
+        .algorithm-info {
+            background: var(--bg-tertiary);
+            border-radius: var(--border-radius-sm);
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 24px;
+        }
+
+        .info-badge {
+            display: inline-block;
+            background: var(--success-gradient);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        /* Controls & Panels */
+        .control-panel {
+            background: var(--bg-tertiary);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .panel-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        /* Modern Button Styles */
+        .btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 56px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        .btn-secondary { background: var(--secondary-gradient); }
+        .btn-success { background: var(--success-gradient); }
+        .btn-warning { background: var(--warning-gradient); }
+        .btn-danger { background: var(--danger-gradient); }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .tool-btn {
+            background: var(--bg-primary);
+            color: var(--text-secondary);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 16px;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-height: 80px;
+        }
+
+        .tool-btn:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .tool-btn.active {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .tool-icon { font-size: 1.5rem; }
+
+        /* Visualization Area */
+        .visualization-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            padding: 24px;
+            position: relative;
+        }
+
+        .grid-wrapper {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow-hard);
+            position: relative;
+            backdrop-filter: blur(20px);
+        }
+
+        .grid {
+            display: inline-grid;
+            gap: 4px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px;
+            border-radius: var(--border-radius-sm);
+            box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .cell {
+            width: 64px;
+            height: 64px;
+            background: var(--bg-primary);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .cell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.05) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .cell:hover::before {
+            transform: translateX(100%);
+        }
+
+        .cell:hover {
+            transform: scale(1.08) rotateZ(2deg);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3);
+            border-color: var(--accent);
+            z-index: 10;
+        }
+
+        /* Cell States */
+        .cell.blocked {
+            background: var(--dark-gradient);
+            border-color: #ff4757;
+            color: #ff4757;
+        }
+
+        .cell.start {
+            background: var(--success-gradient);
+            border-color: #00ff88;
+            color: white;
+            animation: pulse-green 2s infinite;
+        }
+
+        .cell.end {
+            background: var(--warning-gradient);
+            border-color: #ffaa00;
+            color: white;
+            animation: pulse-orange 2s infinite;
+        }
+
+        .cell.path1 {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            border-color: #ff6b6b;
+            color: white;
+            animation: path-glow 1s ease-in-out;
+        }
+
+        .cell.path2 {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            border-color: #4ecdc4;
+            color: white;
+            animation: path-glow 1s ease-in-out;
+        }
+
+        .cell.current1 {
+            animation: current-pulse-red 0.8s infinite;
+            box-shadow: 0 0 30px #ff6b6b;
+        }
+
+        .cell.current2 {
+            animation: current-pulse-blue 0.8s infinite;
+            box-shadow: 0 0 30px #4ecdc4;
+        }
+
+        /* Animations */
+        @keyframes pulse-green {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(0, 255, 136, 0.8); }
+        }
+
+        @keyframes pulse-orange {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 170, 0, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(255, 170, 0, 0.8); }
+        }
+
+        @keyframes path-glow {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes current-pulse-red {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px #ff6b6b; }
+            50% { transform: scale(1.15); box-shadow: 0 0 40px #ff6b6b; }
+        }
+
+        @keyframes current-pulse-blue {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px #4ecdc4; }
+            50% { transform: scale(1.15); box-shadow: 0 0 40px #4ecdc4; }
+        }
+
+        .grid-size-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+                .grid-size-control label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Information Panels */
+        .stats-panel {
+            background: var(--bg-tertiary);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: var(--border-radius-sm);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Progress Indicator */
+        .progress-panel {
+            background: var(--bg-tertiary);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* Algorithm Steps */
+        .steps-panel {
+            background: var(--bg-tertiary);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .step-item {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            background: var(--bg-primary);
+            border-radius: var(--border-radius-sm);
+            border-left: 4px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0.6;
+            transition: all 0.3s;
+        }
+
+        .step-item.active {
+            opacity: 1;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(102, 126, 234, 0.1) 100%);
+            border-left-color: var(--accent);
+        }
+
+        .step-icon {
+            font-size: 1.2rem;
+            color: var(--accent);
+        }
+
+        .step-text {
+            flex: 1;
+            color: var(--text-primary);
+        }
+
+        /* Results Display */
+        .results-panel {
+            background: var(--success-gradient);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            margin-top: 20px;
+            text-align: center;
+            color: white;
+            box-shadow: var(--shadow-soft);
+            transform: scale(0.95);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .results-panel.show {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .result-value {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .result-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .grid-size-control input {
+            width: 60px;
+            padding: 8px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .tool-selector {
+            display: flex;
+            gap: 10px;
+            background: #f0f0f0;
+            padding: 8px;
+            border-radius: 12px;
+        }
+
+        .tool-btn {
+            padding: 12px 20px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tool-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .tool-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-danger {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .grid-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .grid {
+            display: inline-grid;
+            gap: 3px;
+            background: #ddd;
+            padding: 3px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .cell {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        .cell.blocked {
+            background: #34495e;
+            border-color: #2c3e50;
+        }
+
+        .cell.start {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .cell.end {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+
+        .cell.path1 {
+            background: rgba(255, 99, 132, 0.3);
+            border-color: rgba(255, 99, 132, 0.8);
+        }
+
+        .cell.path2 {
+            background: rgba(54, 162, 235, 0.3);
+            border-color: rgba(54, 162, 235, 0.8);
+        }
+
+        .cell.both-paths {
+            background: rgba(153, 102, 255, 0.3);
+            border-color: rgba(153, 102, 255, 0.8);
+        }
+
+        .path-marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        .path-marker.p1 {
+            background: #ff6384;
+            top: 5px;
+            left: 5px;
+        }
+
+        .path-marker.p2 {
+            background: #36a2eb;
+            bottom: 5px;
+            right: 5px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .result-panel {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s;
+        }
+
+        .result-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .result-score {
+            font-size: 3em;
+            color: #667eea;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .path-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .path-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .path-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .path-card.p1 h3 {
+            color: #ff6384;
+        }
+
+        .path-card.p2 h3 {
+            color: #36a2eb;
+        }
+
+        .path-steps {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.6;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .legend-icon {
+            font-size: 24px;
+        }
+
+        .loading {
+            text-align: center;
+            color: #667eea;
+            font-size: 1.2em;
+            margin: 20px 0;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        .cell.animating {
+            animation: shimmer 2s infinite;
+            background: linear-gradient(90deg, #f0f0f0 0%, #667eea 50%, #f0f0f0 100%);
+            background-size: 1000px 100%;
+        }
+
+        .instructions {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            color: #666;
+        }
+
+        .instructions li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar with Controls and Information -->
+        <div class="sidebar">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-icon">🍒</div>
+                <h1>Cherry Pickup</h1>
+                <p class="subtitle">Advanced Algorithm Visualizer</p>
+            </div>
+
+            <!-- Algorithm Information -->
+            <div class="algorithm-info">
+                <div class="info-badge">Dynamic Programming</div>
+                <div class="info-badge">Path Optimization</div>
+                <div class="info-badge">O(n³) Complexity</div>
+            </div>
+
+            <!-- Grid Configuration -->
+            <div class="control-panel">
+                <div class="panel-title">
+                    <i class="material-icons">grid_4x4</i>
+                    Grid Configuration
+                </div>
+                <div class="grid-size-control">
+                    <label for="gridSize">Grid Size:</label>
+                    <input type="number" id="gridSize" min="3" max="8" value="5" style="background: var(--bg-primary); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px; border-radius: 8px; width: 60px;">
+                    <button class="btn btn-secondary" onclick="createGrid()">
+                        <i class="fas fa-refresh"></i> Create
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tool Selection -->
+            <div class="control-panel">
+                <div class="panel-title">
+                    <i class="material-icons">build</i>
+                    Tools
+                </div>
+                <div class="tool-grid">
+                    <button class="tool-btn active" data-tool="cherry" onclick="selectTool('cherry')">
+                        <div class="tool-icon">🍒</div>
+                        <span>Cherry</span>
+                    </button>
+                    <button class="tool-btn" data-tool="block" onclick="selectTool('block')">
+                        <div class="tool-icon">🚧</div>
+                        <span>Block</span>
+                    </button>
+                    <button class="tool-btn" data-tool="clear" onclick="selectTool('clear')">
+                        <div class="tool-icon">🧹</div>
+                        <span>Clear</span>
+                    </button>
+                    <button class="tool-btn" data-tool="info" onclick="showInstructions()">
+                        <div class="tool-icon">ℹ️</div>
+                        <span>Help</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="stats-panel">
+                <div class="panel-title">
+                    <i class="material-icons">analytics</i>
+                    Statistics
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="cherryCount">0</div>
+                        <div class="stat-label">Cherries</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="pathLength">0</div>
+                        <div class="stat-label">Path Length</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="maxCherries">0</div>
+                        <div class="stat-label">Max Possible</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="efficiency">0%</div>
+                        <div class="stat-label">Efficiency</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress -->
+            <div class="progress-panel">
+                <div class="panel-title">
+                    <i class="material-icons">timeline</i>
+                    Progress
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <div class="progress-text" id="progressText">Ready to start</div>
+            </div>
+
+            <!-- Algorithm Steps -->
+            <div class="steps-panel">
+                <div class="panel-title">
+                    <i class="material-icons">list</i>
+                    Algorithm Steps
+                </div>
+                <div id="stepsList">
+                    <div class="step-item">
+                        <i class="step-icon fas fa-play"></i>
+                        <div class="step-text">Click "Run Algorithm" to begin</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="controls">
+                <button class="btn btn-success" onclick="runAlgorithm()">
+                    <i class="fas fa-play"></i> Run Algorithm
+                </button>
+                <button class="btn btn-danger" onclick="resetGrid()">
+                    <i class="fas fa-refresh"></i> Reset Grid
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Visualization Area -->
+            <div class="visualization-container">
+                <div class="grid-wrapper">
+                    <div class="grid" id="grid"></div>
+                </div>
+            </div>
+
+            <!-- Results Panel -->
+            <div class="results-panel" id="resultsPanel">
+                <div class="result-value" id="resultValue">0</div>
+                <div class="result-label">Maximum Cherries Collected</div>
+            </div>
+        </div>
+    </div>
+
+
+
+        <div id="resultPanel"></div>
+    </div>
+
+    <script>
+        let gridSize = 5;
+        let currentTool = 'cherry';
+        let grid = [];
+        let isAnimating = false;
+        let animationSpeed = 800; // Slow animation for better visualization
+        let steps = [];
+        let currentStep = 0;
+        let totalCherries = 0;
+
+        function createGrid() {
+            gridSize = parseInt(document.getElementById('gridSize').value);
+            if (gridSize < 3 || gridSize > 8) {
+                showNotification('Grid size must be between 3 and 8', 'warning');
+                return;
+            }
+
+            const gridElement = document.getElementById('grid');
+            gridElement.innerHTML = '';
+            gridElement.style.gridTemplateColumns = `repeat(${gridSize}, 64px)`;
+            
+            grid = Array(gridSize).fill().map(() => Array(gridSize).fill(0));
+            totalCherries = 0;
+            
+            // Reset statistics
+            updateStatistics();
+            resetProgress();
+            clearSteps();
+            
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.dataset.row = i;
+                    cell.dataset.col = j;
+                    cell.onclick = () => handleCellClick(i, j);
+                    
+                    if (i === 0 && j === 0) {
+                        cell.classList.add('start');
+                        cell.innerHTML = '🟢';
+                    } else if (i === gridSize - 1 && j === gridSize - 1) {
+                        cell.classList.add('end');
+                        cell.innerHTML = '🏁';
+                    }
+                    
+                    gridElement.appendChild(cell);
+                }
+            }
+            
+            showNotification('Grid created successfully! Start placing cherries and obstacles.', 'success');
+        }
+
+        // Enhanced utility functions
+        function showNotification(message, type = 'info') {
+            addStep(message, type);
+        }
+
+        function updateStatistics() {
+            // Count current cherries in grid
+            let currentCherries = 0;
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    if (grid[i][j] === 1) currentCherries++;
+                }
+            }
+            
+            document.getElementById('cherryCount').textContent = currentCherries;
+            document.getElementById('pathLength').textContent = (gridSize - 1) * 2;
+            document.getElementById('maxCherries').textContent = currentCherries;
+            
+            const efficiency = currentCherries > 0 ? Math.round((currentCherries / (gridSize * gridSize)) * 100) : 0;
+            document.getElementById('efficiency').textContent = efficiency + '%';
+        }
+
+        function addStep(message, type = 'info') {
+            const stepsList = document.getElementById('stepsList');
+            const stepItem = document.createElement('div');
+            stepItem.className = 'step-item';
+            
+            let icon = '';
+            switch(type) {
+                case 'success': icon = 'fas fa-check-circle'; break;
+                case 'error': icon = 'fas fa-times-circle'; break;
+                case 'warning': icon = 'fas fa-exclamation-triangle'; break;
+                default: icon = 'fas fa-info-circle';
+            }
+            
+            stepItem.innerHTML = `
+                <i class="step-icon ${icon}"></i>
+                <div class="step-text">${message}</div>
+            `;
+            
+            stepsList.appendChild(stepItem);
+            stepsList.scrollTop = stepsList.scrollHeight;
+            
+            // Add active class briefly for animation
+            setTimeout(() => stepItem.classList.add('active'), 100);
+        }
+
+        function updateProgress(percentage, text) {
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = text;
+        }
+
+        function resetProgress() {
+            updateProgress(0, 'Ready to start');
+        }
+
+        function clearSteps() {
+            document.getElementById('stepsList').innerHTML = `
+                <div class="step-item">
+                    <i class="step-icon fas fa-play"></i>
+                    <div class="step-text">Click "Run Algorithm" to begin</div>
+                </div>
+            `;
+        }
+
+        function resetProgress() {
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('progressText').textContent = 'Ready to start';
+        }
+
+        function updateProgress(percentage, text) {
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = text;
+        }
+
+        function clearSteps() {
+            const stepsList = document.getElementById('stepsList');
+            stepsList.innerHTML = '<div class="step-item"><i class="step-icon fas fa-play"></i><div class="step-text">Click "Run Algorithm" to begin</div></div>';
+            steps = [];
+            currentStep = 0;
+        }
+
+        function addStep(text, type = 'info') {
+            steps.push({ text, type, timestamp: Date.now() });
+            
+            const stepsList = document.getElementById('stepsList');
+            const stepItem = document.createElement('div');
+            stepItem.className = `step-item ${type}`;
+            
+            const icon = type === 'success' ? 'check' : 
+                        type === 'warning' ? 'warning' : 
+                        type === 'error' ? 'error' : 'info';
+            
+            stepItem.innerHTML = `
+                <i class="step-icon fas fa-${icon}"></i>
+                <div class="step-text">${text}</div>
+            `;
+            
+            if (stepsList.children.length > 0 && stepsList.firstChild.textContent.includes('Click "Run Algorithm"')) {
+                stepsList.innerHTML = '';
+            }
+            
+            stepsList.appendChild(stepItem);
+            stepsList.scrollTop = stepsList.scrollHeight;
+            
+            // Add active class briefly for animation
+            setTimeout(() => stepItem.classList.add('active'), 100);
+        }
+
+        function selectTool(tool) {
+            currentTool = tool;
+            document.querySelectorAll('.tool-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-tool="${tool}"]`).classList.add('active');
+        }
+
+        function handleCellClick(i, j) {
+            if (isAnimating) return;
+            
+            const cell = document.querySelector(`[data-row="${i}"][data-col="${j}"]`);
+            const isStart = (i === 0 && j === 0);
+            const isEnd = (i === gridSize - 1 && j === gridSize - 1);
+            
+            if (currentTool === 'cherry') {
+                if (grid[i][j] === -1) return; // Can't place cherry on obstacle
+                grid[i][j] = grid[i][j] === 1 ? 0 : 1;
+                
+                // Update display
+                if (grid[i][j] === 1) {
+                    if (isStart) {
+                        cell.innerHTML = '🟢🍒';
+                    } else if (isEnd) {
+                        cell.innerHTML = '🏁🍒';
+                    } else {
+                        cell.innerHTML = '🍒';
+                    }
+                } else {
+                    if (isStart) {
+                        cell.innerHTML = '🟢';
+                    } else if (isEnd) {
+                        cell.innerHTML = '🏁';
+                    } else {
+                        cell.innerHTML = '';
+                    }
+                }
+                cell.classList.remove('blocked');
+            } else if (currentTool === 'block') {
+                if (isStart || isEnd) return; // Can't block start or end
+                if (grid[i][j] === 1) return; // Can't block if cherry exists
+                grid[i][j] = grid[i][j] === -1 ? 0 : -1;
+                cell.innerHTML = '';
+                cell.classList.toggle('blocked');
+            } else if (currentTool === 'clear') {
+                grid[i][j] = 0;
+                if (isStart) {
+                    cell.innerHTML = '🟢';
+                } else if (isEnd) {
+                    cell.innerHTML = '🏁';
+                } else {
+                    cell.innerHTML = '';
+                }
+                cell.classList.remove('blocked');
+            }
+            
+            // Update statistics after any change
+            updateStatistics();
+        }
+
+        function resetGrid() {
+            createGrid();
+        }
+
+        async function runAlgorithm() {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            // Count total cherries for statistics
+            totalCherries = 0;
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    if (grid[i][j] === 1) totalCherries++;
+                }
+            }
+
+            addStep('🚀 Starting algorithm execution...', 'info');
+            updateProgress(10, 'Initializing...');
+
+            // Clear previous animations
+            document.querySelectorAll('.cell').forEach(cell => {
+                cell.classList.remove('path1', 'path2', 'both-paths', 'current1', 'current2');
+            });
+
+            await new Promise(resolve => setTimeout(resolve, 300));
+
+            addStep('📊 Analyzing grid configuration...', 'info');
+            updateProgress(20, 'Analyzing grid...');
+            
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            addStep('🔍 Computing optimal paths using dynamic programming...', 'info');
+            updateProgress(40, 'Computing paths...');
+
+            const result = cherryPickup(grid);
+            
+            updateProgress(70, 'Paths computed, preparing animation...');
+            
+            if (result.maxCherries <= 0) {
+                addStep('❌ No valid path found! Try removing obstacles.', 'error');
+                showResults(0, [], []);
+                isAnimating = false;
+                return;
+            }
+
+            addStep(`✅ Found optimal solution: ${result.maxCherries} cherries!`, 'success');
+            updateProgress(80, 'Animating solution...');
+
+            await animatePaths(result.path1, result.path2);
+
+            updateProgress(100, 'Animation complete!');
+            showResults(result.maxCherries, result.path1, result.path2);
+            
+            isAnimating = false;
+        }
+
+        async function animatePaths(path1, path2) {
+            addStep('🎬 Starting path animation...', 'info');
+            
+            const maxSteps = Math.max(path1.length, path2.length);
+            let currentPath1Cell = null;
+            let currentPath2Cell = null;
+
+            for (let step = 0; step < maxSteps; step++) {
+                // Remove previous current indicators
+                if (currentPath1Cell) currentPath1Cell.classList.remove('current1');
+                if (currentPath2Cell) currentPath2Cell.classList.remove('current2');
+
+                // Animate Path 1
+                if (step < path1.length) {
+                    const [i1, j1] = path1[step];
+                    const cell1 = document.querySelector(`[data-row="${i1}"][data-col="${j1}"]`);
+                    
+                    addStep(`🔴 Path 1: Moving to (${i1}, ${j1})`, 'info');
+                    
+                    cell1.classList.add('current1');
+                    currentPath1Cell = cell1;
+                    
+                    // Add path marking after a short delay
+                    setTimeout(() => {
+                        cell1.classList.add('path1');
+                        cell1.classList.remove('current1');
+                    }, animationSpeed / 2);
+                }
+
+                // Animate Path 2 (slightly delayed for visual clarity)
+                setTimeout(async () => {
+                    if (step < path2.length) {
+                        const [i2, j2] = path2[step];
+                        const cell2 = document.querySelector(`[data-row="${i2}"][data-col="${j2}"]`);
+                        
+                        addStep(`🔵 Path 2: Moving to (${i2}, ${j2})`, 'info');
+                        
+                        cell2.classList.add('current2');
+                        currentPath2Cell = cell2;
+                        
+                        // Add path marking after a short delay
+                        setTimeout(() => {
+                            cell2.classList.add('path2');
+                            cell2.classList.remove('current2');
+                        }, animationSpeed / 2);
+                    }
+                }, animationSpeed / 4);
+
+                await new Promise(resolve => setTimeout(resolve, animationSpeed));
+                
+                // Update progress during animation
+                const progress = 80 + (step / maxSteps) * 15;
+                updateProgress(progress, `Animating step ${step + 1}/${maxSteps}...`);
+            }
+
+            // Clean up current indicators
+            if (currentPath1Cell) currentPath1Cell.classList.remove('current1');
+            if (currentPath2Cell) currentPath2Cell.classList.remove('current2');
+            
+            addStep('✨ Path animation complete!', 'success');
+        }
+
+        function showResults(maxCherries, path1, path2) {
+            // Update final statistics
+            document.getElementById('maxCherries').textContent = maxCherries;
+            const efficiency = totalCherries > 0 ? Math.round((maxCherries / totalCherries) * 100) : 0;
+            document.getElementById('efficiency').textContent = efficiency + '%';
+            
+            // Show results panel with animation
+            const resultsPanel = document.getElementById('resultsPanel');
+            document.getElementById('resultValue').textContent = maxCherries;
+            resultsPanel.classList.add('show');
+            
+            if (maxCherries > 0) {
+                addStep(`🏆 Algorithm completed successfully! Collected ${maxCherries} cherries.`, 'success');
+                
+                const pathSteps1 = path1.map(([i, j]) => `(${i},${j})`).join(' → ');
+                const pathSteps2 = path2.map(([i, j]) => `(${i},${j})`).join(' → ');
+                
+                addStep(`🔴 Path 1: ${pathSteps1}`, 'info');
+                addStep(`🔵 Path 2: ${pathSteps2}`, 'info');
+                addStep(`📊 Efficiency: ${efficiency}% of available cherries collected`, 'success');
+            } else {
+                resultsPanel.style.background = 'var(--danger-gradient)';
+                document.getElementById('resultValue').textContent = '0';
+                addStep('❌ No solution found with current configuration', 'error');
+            }
+        }
+
+        function showInstructions() {
+            addStep('📋 Instructions:', 'info');
+            addStep('1. Select grid size (3-8) and click "Create Grid"', 'info');
+            addStep('2. Use 🍒 tool to place cherries on the grid', 'info');
+            addStep('3. Use 🚧 tool to place obstacles (optional)', 'info');
+            addStep('4. Use 🧹 tool to clear cells', 'info');
+            addStep('5. Click "Run Algorithm" to find optimal paths', 'info');
+            addStep('6. Watch as the algorithm finds two paths that collect maximum cherries', 'info');
+        }
+
+        function displayResults_old(result) {
+            const pathSteps1 = result.path1.map(([i, j]) => `(${i},${j})`).join(' → ');
+            const pathSteps2 = result.path2.map(([i, j]) => `(${i},${j})`).join(' → ');
+
+            document.getElementById('resultPanel').innerHTML = `
+                <div class="result-panel">
+                    <div class="result-title">🎉 Optimal Solution Found!</div>
+                    <div class="result-score">${result.maxCherries} 🍒</div>
+                    <div class="path-info">
+                        <div class="path-card p1">
+                            <h3>🔴 Path 1</h3>
+                            <div class="path-steps">${pathSteps1}</div>
+                        </div>
+                        <div class="path-card p2">
+                            <h3>🔵 Path 2</h3>
+                            <div class="path-steps">${pathSteps2}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function cherryPickup(grid) {
+            const n = grid.length;
+            const memo = {};
+            
+            function dp(i1, j1, i2, j2) {
+                if (i1 >= n || i2 >= n || j1 >= n || j2 >= n || 
+                    grid[i1][j1] === -1 || grid[i2][j2] === -1) {
+                    return -1e8;
+                }
+
+                const key = `${i1},${j1},${i2},${j2}`;
+                if (memo[key] !== undefined) {
+                    return memo[key];
+                }
+
+                if (i1 === n - 1 && j1 === n - 1 && i2 === n - 1 && j2 === n - 1) {
+                    return grid[i1][j1];
+                }
+
+                let cherries = 0;
+                if (i1 === i2 && j1 === j2) {
+                    cherries = grid[i1][j1];
+                } else {
+                    cherries = grid[i1][j1] + grid[i2][j2];
+                }
+
+                // Only 4 valid move combinations: (right,right), (right,down), (down,right), (down,down)
+                const moves = [
+                    [0, 1, 0, 1],  // person1: right, person2: right
+                    [0, 1, 1, 0],  // person1: right, person2: down
+                    [1, 0, 0, 1],  // person1: down,  person2: right
+                    [1, 0, 1, 0]   // person1: down,  person2: down
+                ];
+
+                let maxFuture = -1e8;
+                for (const [di1, dj1, di2, dj2] of moves) {
+                    maxFuture = Math.max(maxFuture, 
+                        dp(i1 + di1, j1 + dj1, i2 + di2, j2 + dj2));
+                }
+
+                memo[key] = cherries + maxFuture;
+                return memo[key];
+            }
+
+            const maxCherries = dp(0, 0, 0, 0);
+
+            // Reconstruct paths
+            const path1 = [[0, 0]];
+            const path2 = [[0, 0]];
+            let i1 = 0, j1 = 0, i2 = 0, j2 = 0;
+
+            while (i1 < n - 1 || j1 < n - 1 || i2 < n - 1 || j2 < n - 1) {
+                const moves = [
+                    [0, 1, 0, 1],
+                    [0, 1, 1, 0],
+                    [1, 0, 0, 1],
+                    [1, 0, 1, 0]
+                ];
+
+                let bestMove = null;
+                let bestValue = -1e8;
+
+                for (const [di1, dj1, di2, dj2] of moves) {
+                    const ni1 = i1 + di1, nj1 = j1 + dj1;
+                    const ni2 = i2 + di2, nj2 = j2 + dj2;
+                    
+                    if (ni1 < n && nj1 < n && ni2 < n && nj2 < n &&
+                        grid[ni1][nj1] !== -1 && grid[ni2][nj2] !== -1) {
+                        const key = `${ni1},${nj1},${ni2},${nj2}`;
+                        const value = memo[key] || -1e8;
+                        
+                        if (value > bestValue) {
+                            bestValue = value;
+                            bestMove = [di1, dj1, di2, dj2];
+                        }
+                    }
+                }
+
+                if (!bestMove) break;
+
+                i1 += bestMove[0];
+                j1 += bestMove[1];
+                i2 += bestMove[2];
+                j2 += bestMove[3];
+
+                path1.push([i1, j1]);
+                path2.push([i2, j2]);
+
+                // Both reached destination
+                if (i1 === n - 1 && j1 === n - 1 && i2 === n - 1 && j2 === n - 1) {
+                    break;
+                }
+            }
+
+            // Ensure both paths end at destination
+            if (path1[path1.length - 1][0] !== n - 1 || path1[path1.length - 1][1] !== n - 1) {
+                path1.push([n - 1, n - 1]);
+            }
+            if (path2[path2.length - 1][0] !== n - 1 || path2[path2.length - 1][1] !== n - 1) {
+                path2.push([n - 1, n - 1]);
+            }
+
+            return { maxCherries: Math.max(0, maxCherries), path1, path2 };
+        }
+
+        // Initialize grid on load
+        createGrid();
+    </script>
+</body>
+</html>

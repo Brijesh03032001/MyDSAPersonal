@@ -1,6 +1,2 @@
-abpcplea
-4
-ale
-aple
-monkey
-plea
+5
+2 7 9 4 4
