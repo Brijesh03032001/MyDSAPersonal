@@ -1,0 +1,51 @@
+# Minimum Depth of Binary Tree
+
+**Difficulty:** Easy  
+**URL:** [minimum-depth-of-binary-tree](https://leetcode.com/problems/minimum-depth-of-binary-tree/)  
+**Tags:** Tree, Depth-First Search, Breadth-First Search, Binary Tree
+
+---
+
+## My Notes
+
+<!-- Add your personal notes here -->
+
+## Time Complexity
+
+<!-- e.g. O(n log n) -->
+
+## Space Complexity
+
+<!-- e.g. O(n) -->
+
+---
+
+## Problem Statement
+
+Given a binary tree, find its minimum depth.
+
+The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.
+
+Note:&nbsp;A leaf is a node with no children.
+
+&nbsp;
+Example 1:
+
+
+Input: root = [3,9,20,null,null,15,7]
+Output: 2
+
+
+Example 2:
+
+
+Input: root = [2,null,3,null,4,null,5,null,6]
+Output: 5
+
+
+&nbsp;
+Constraints:
+
+
+	The number of nodes in the tree is in the range [0, 105].
+	-1000 <= Node.val <= 1000
