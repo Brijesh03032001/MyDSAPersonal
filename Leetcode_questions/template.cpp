@@ -460,13 +460,13 @@ public:
 };
 
 // ================================ GRAPH UTILITIES ================================
-vector<vi> adj;
+vector<vpii> adj; // Changed to store pairs (vertex, weight)
 vi vis, dist, parent;
 
 void dfs(int u)
 {
     vis[u] = 1;
-    for (int v : adj[u])
+    for (auto [v, w] : adj[u])
     {
         if (!vis[v])
         {
@@ -488,7 +488,7 @@ void bfs(int start)
         int u = q.front();
         q.pop();
 
-        for (int v : adj[u])
+        for (auto [v, w] : adj[u])
         {
             if (!vis[v])
             {
