@@ -4,7 +4,7 @@ public:
         int n = grid.size();
 
         if(grid[0][0] != 0) return -1;
-        if(n == 1 && grid[0][0] == 0) return 1;
+        if(n == 1) return 1;
 
         queue<pair<int,int>> qu;
         qu.push({0,0});
