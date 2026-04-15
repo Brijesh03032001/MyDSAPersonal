@@ -23,10 +23,9 @@ public:
 
             for(int i = 0; i < qsize; i++)
             {
-                pair<int,int> pa= qu.front();
+                auto [x, y] = qu.front();
                 qu.pop();
-                int x = pa.first;
-                int y = pa.second;
+
                 for(auto &d : dir)
                 {
                     int nx = x + d.first;
