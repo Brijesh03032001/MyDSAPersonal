@@ -1,8 +1,6 @@
 class Solution {
 public:
     int dp[201][10001];
-
-    // non zero value is true , and zero is false;
     // anything above (100*200)/2 ; 
     bool sol(vector<int>& arr, int W, int i)
     {
@@ -22,7 +20,7 @@ public:
         {
              bool take = sol(arr, W - arr[i-1] , i-1);
              bool not_take = sol(arr, W, i-1);
-             int res = take || not_take;  // if here koi bhi true aaya then result will be 1, if both false then 0, and if not computed then -1.
+             int res = take || not_take;
              return dp[i][W] = res;
         }
         return false;
