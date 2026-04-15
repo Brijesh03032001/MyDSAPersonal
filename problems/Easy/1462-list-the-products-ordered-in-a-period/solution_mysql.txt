@@ -7,6 +7,3 @@ join Products pr
 where (ord.order_date >= '2020-02-01' and ord.order_date < '2020-03-01') 
 group by pr.product_id
 having SUM(ord.unit) >= 100
-
-
---  we cannot use aggregate functions in where clause i.e where (ord.order_date >= '2020-02-01' and ord.order_date < '2020-03-01')  and SUM(ord.unit) >= 100 is wrobng.
