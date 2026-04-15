@@ -1,0 +1,26 @@
+-- First, select the columns we need in the final output.
+SELECT
+    s.student_id,
+    s.student_name,
+    sub.subject_name,
+    -- Count the number of non-null records from the Examinations table for each group.
+    -- This correctly counts 0 for student-subject pairs that don't exist in Examinations.
+    COUNT(e.student_id) AS attended_exams
+FROM
+    -- Create a Cartesian product of Students and Subjects to get every possible
+    -- combination of a student and a subject.
+    Students s
+CROSS JOIN
+    Subjects sub
+LEFT JOIN
+    -- LEFT JOIN this complete list with the Examinations table.
+    -- The join condition must match both the student_id and the subject_name.
+    Examinations e ON s.student_id = e.student_id AND sub.subject_name = e.subject_name
+-- Group by the unique student and subject combination to count attendances separately.
+GROUP BY
+    s.student_id,
+    sub.subject_name
+-- Order the final result as required.
+ORDER BY
+    s.student_id,
+    sub.subject_name;
