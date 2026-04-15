@@ -1,37 +1,21 @@
 class Solution {
 public:
-    int maxArea(vector<int>& height){
-        int p1= 0;
-        int n = height.size();
-        int p2= n-1;
-        int ans = INT_MIN;
-        while(p1 < p2)
+    int maxArea(vector<int>& height) {
+        int res = 0;
+        int p2= height.size()-1;
+        int p1=0;
+        while(p2>p1)
         {
-            int ref = min(height[p1],height[p2]);
-            ans = max(ans, ref*(p2-p1));
-            if(ref == height[p1] && ref!= height[p2])
+            res = max(res, (p2-p1)*min(height[p2],height[p1]));
+            if(height[p1] > height[p2])
+            {
+                p2--;
+            }
+            else
             {
                 p1++;
             }
-            else if(ref == height[p2] && ref!=height[p1])
-            {
-                p2 --;
-            }
-            else if(height[p1] == height[p2])
-            {
-                if(height[p1+1] < height[p2-1] )
-                {
-                    p2--;
-                }
-                else if(height[p1+1] >= height[p2-1])
-                {
-                    p1++;
-                }
-               
-            }
-
-            
         }
-        return ans;
+        return res;
     }
 };
