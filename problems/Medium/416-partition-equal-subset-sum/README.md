@@ -1,7 +1,7 @@
 # Partition Equal Subset Sum
 
 **Difficulty:** Medium  
-**URL:** [https://leetcode.com/problems/partition-equal-subset-sum](https://leetcode.com/problems/partition-equal-subset-sum)  
+**URL:** [https://leetcode.com/problems/partition-equal-subset-sum/](https://leetcode.com/problems/partition-equal-subset-sum/)  
 **Tags:** Array, Dynamic Programming
 
 ---
