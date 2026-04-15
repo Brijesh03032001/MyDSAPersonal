@@ -1,7 +1,7 @@
 # First Bad Version
 
 **Difficulty:** Easy  
-**URL:** [https://leetcode.com/problems/first-bad-version](https://leetcode.com/problems/first-bad-version)  
+**URL:** [https://leetcode.com/problems/first-bad-version/](https://leetcode.com/problems/first-bad-version/)  
 **Tags:** Binary Search, Interactive
 
 ---
