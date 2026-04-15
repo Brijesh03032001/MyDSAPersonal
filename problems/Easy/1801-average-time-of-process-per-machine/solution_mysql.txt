@@ -1,0 +1,18 @@
+-- Select the machine ID and calculate the total processing time.
+-- We round the final result to 3 decimal places for cleaner output.
+SELECT
+    a_start.machine_id,
+    ROUND(AVG(a_end.`timestamp` - a_start.`timestamp`), 3) AS processing_time
+FROM
+    Activity a_start
+JOIN
+    -- Join the table to itself to get start and end times on the same row.
+    Activity a_end ON a_start.machine_id = a_end.machine_id
+    AND a_start.process_id = a_end.process_id
+    -- Ensure we are matching a 'start' activity with an 'end' activity.
+    AND a_start.activity_type = 'start'
+    AND a_end.activity_type = 'end'
+-- Group the results by machine ID to calculate the sum for each machine.
+GROUP BY
+    a_start.machine_id;
+
