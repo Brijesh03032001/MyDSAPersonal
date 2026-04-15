@@ -1,7 +1,7 @@
 # Trionic Array I
 
 **Difficulty:** Easy  
-**URL:** [https://leetcode.com/problems/trionic-array-i](https://leetcode.com/problems/trionic-array-i)  
+**URL:** [https://leetcode.com/problems/trionic-array-i/](https://leetcode.com/problems/trionic-array-i/)  
 **Tags:** Array
 
 ---
