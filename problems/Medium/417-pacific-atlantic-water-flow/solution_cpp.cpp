@@ -5,7 +5,7 @@ public:
         visited[i][j] = true;
         int n = heights.size();
         int m = heights[0].size();
-        cout << n << m ;
+
         for(int k=0;k<4;k++)
         {
             int new_r = i + vc[k].first;
