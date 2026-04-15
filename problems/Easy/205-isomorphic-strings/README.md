@@ -1,7 +1,7 @@
 # Isomorphic Strings
 
 **Difficulty:** Easy  
-**URL:** [https://leetcode.com/problems/isomorphic-strings](https://leetcode.com/problems/isomorphic-strings)  
+**URL:** [https://leetcode.com/problems/isomorphic-strings/](https://leetcode.com/problems/isomorphic-strings/)  
 **Tags:** Hash Table, String
 
 ---
