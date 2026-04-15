@@ -1,0 +1,59 @@
+-- This query calculates the number of accounts in each income category.
+-- It is specifically designed to show a count of 0 for categories that have no accounts.
+
+-- Step 1: Create a CTE that holds all possible category names.
+-- This acts as a master list to ensure all categories appear in the final output.
+WITH AllCategories AS (
+    SELECT 'Low Salary' AS category
+    UNION ALL
+    SELECT 'Average Salary' AS category
+    UNION ALL
+    SELECT 'High Salary' AS category
+),
+
+-- Step 2: Calculate the total income for each account_id.
+AccountIncomes AS (
+    SELECT
+        account_id,
+        SUM(income) AS total_income
+    FROM
+        Accounts
+    GROUP BY
+        account_id
+),
+
+-- Step 3: Categorize each account based on its total income.
+AccountCategories AS (
+    SELECT
+        CASE
+            WHEN total_income < 20000 THEN 'Low Salary'
+            WHEN total_income BETWEEN 20000 AND 50000 THEN 'Average Salary'
+            WHEN total_income > 50000 THEN 'High Salary'
+        END AS category
+    FROM
+        AccountIncomes
+),
+
+-- Step 4: Count the number of accounts in each category that actually exists in the data.
+ActualCounts AS (
+    SELECT
+        category,
+        COUNT(*) AS accounts_count
+    FROM
+        AccountCategories
+    GROUP BY
+        category
+)
+
+-- Step 5: Perform a LEFT JOIN from the complete list of categories to the actual counts.
+-- This guarantees that every category is listed. If a category from the master list
+-- has no matching accounts, the join will produce a NULL for its count.
+SELECT
+    ac.category,
+    -- COALESCE turns any NULL counts (for categories with no accounts) into a 0.
+    COALESCE(act.accounts_count, 0) AS accounts_count
+FROM
+    AllCategories ac
+LEFT JOIN
+    ActualCounts act ON ac.category = act.category;
+
