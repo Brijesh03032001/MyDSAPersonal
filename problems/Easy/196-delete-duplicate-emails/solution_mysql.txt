@@ -1,0 +1,13 @@
+# Write your MySQL query statement below
+with temp_table as (
+    SELECT min(id) AS min_id
+        FROM Person
+        GROUP BY email
+        )
+
+DELETE 
+FROM person
+WHERE id NOT IN (
+        SELECT min_id
+       FROM temp_table
+       );
