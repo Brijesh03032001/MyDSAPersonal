@@ -1,7 +1,7 @@
 # Uncrossed Lines
 
 **Difficulty:** Medium  
-**URL:** [https://leetcode.com/problems/uncrossed-lines](https://leetcode.com/problems/uncrossed-lines)  
+**URL:** [https://leetcode.com/problems/uncrossed-lines/](https://leetcode.com/problems/uncrossed-lines/)  
 **Tags:** Array, Dynamic Programming
 
 ---
