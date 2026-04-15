@@ -27,19 +27,19 @@ public:
 
         int n = present.size();
         vector<int>cost(n, -1);
-        // if(budget == 0)
-        // {
-        //      int ref_su = 0;
-        //      for(int i=0;i<n;i++)
-        //      {
-        //         if( present[i] == 0)
-        //         {
-        //              ref_su += future[i];
-        //         }
-        //        return ref_su;
+        if(budget == 0)
+        {
+             int ref_su = 0;
+             for(int i=0;i<n;i++)
+             {
+                if( present[i] == 0)
+                {
+                     ref_su += future[i];
+                }
+               return ref_su;
 
-        //      }
-        //  }
+             }
+         }
         for(int i=0;i<n;i++)
         {
             cost[i] = future[i] - present[i];
