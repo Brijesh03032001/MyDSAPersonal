@@ -1,5 +1,29 @@
-// LeetCode submission — code could not be fetched automatically.
-// To fill this in, open the submission on LeetCode and paste your code here.
-// Submission key: sort-colors__1761631145
-// Language: cpp
-// Status: Accepted
+class Solution {
+public:
+   
+void sortColors(vector<int> &nums)
+{
+
+    int n = nums.size();
+
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = 0; j < n - i - 1; j++)
+        {
+
+            if (nums[j] > nums[j + 1])
+            {
+                swap(nums[j], nums[j + 1]);
+            }
+        }
+        cout << "After " << i << "th Iteration :\n";
+        for (int k = 0; k < n; k++)
+        {
+            cout << nums[k] << " ";
+        }
+        cout << "\n";
+    }
+    return;
+}
+
+};
