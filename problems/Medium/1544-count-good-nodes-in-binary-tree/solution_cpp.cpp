@@ -22,17 +22,11 @@ public:
  int goodNodes(TreeNode* root,int maxVal=INT_MIN) {
         if(!root)return 0;
         
-        // maxVal=max(maxVal,root->val);
-        int res = 0;
-        if(root->val >= maxVal) {
-            res = 1;
-            maxVal = root->val;
-        }
+        maxVal=max(maxVal,root->val);
        int l= goodNodes(root->left,maxVal);
        int r=  goodNodes(root->right,maxVal);
-        res += l;
-        res += r;
-        return res;
+        if(root->val>=maxVal) return l+r+1;
+        return l+r;
     }
    
 };
