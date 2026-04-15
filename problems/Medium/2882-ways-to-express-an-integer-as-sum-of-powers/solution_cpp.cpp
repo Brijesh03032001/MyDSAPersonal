@@ -1,40 +1,26 @@
+#include <vector>
+using namespace std;
+static const int MOD = 1'000'000'007;
+
 class Solution {
 public:
-    vector<vector<int>>dp;
-    const int MOD = 1e9 + 7;
-    int solve(int i, int W , vector<int>&vc)
-    {
-        if(W == 0) return 1;
-        if(i<0 || W<0) return 0;
-         if (dp[i][W] != -1) {
-            return dp[i][W];
-        }
-
-        if(vc[i]> W)
-        {
-            return dp[i][W] = solve(i-1, W, vc);
-        }
-        else
-        {
-            int include = solve(i-1, W - vc[i], vc) % MOD;
-            int exclude = solve(i-1, W, vc) % MOD;
-
-            return dp[i][W] = (include + exclude)% MOD;
-        }
-        return 0;
-    }
-
     int numberOfWays(int n, int x) {
-        
-        vector<int>vc;
-        int i = 1;
-
-        while(int(pow(i,x)) <= n)
-        {
-            vc.push_back(int(pow(i,x)));
-            i++;
+        // collect powers i^x <= n
+        vector<int> powers;
+        for (int i = 1; ; ++i) {
+            long long p = 1;
+            for (int k = 0; k < x; ++k) p *= i;
+            if (p > n) break;
+            powers.push_back((int)p);
         }
-        dp.assign(vc.size(), vector<int>(n + 1, -1));
-        return solve(vc.size()-1, n, vc);
+
+        vector<long long> dp(n + 1, 0);
+        dp[0] = 1;
+        for (int p : powers) {
+            for (int s = n; s >= p; --s) {
+                dp[s] = (dp[s] + dp[s - p]) % MOD;
+            }
+        }
+        return (int)dp[n];
     }
 };
