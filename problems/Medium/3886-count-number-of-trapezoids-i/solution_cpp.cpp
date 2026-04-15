@@ -1,17 +1,16 @@
 class Solution {
 public:
     const int mod = 1e9 + 7;
-    static bool com(const vector<int>& a, const vector<int>& b)
-{
-    // This sorts in ASCENDING order (smallest to largest)
-    return a[1] < b[1];
-
-    /* // If you wanted DESCENDING order, you would use >
-    // return a[1] > b[1];
-    */
-}
+    static bool com(vector<int>a , vector<int> b)
+    {
+        if(a[1] > b[1])
+        {
+            return false;
+        }
+        return true;
+    }
     int countTrapezoids(vector<vector<int>>& points) {
-        sort(points.begin(), points.end(), com);
+        //  sort(points.begin(), points.end(), com);
          unordered_map<int,int>mp;
          for(int i=0;i<points.size();i++)
          {
