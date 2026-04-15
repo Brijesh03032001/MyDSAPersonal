@@ -1,0 +1,57 @@
+# Write your MySQL query statement below
+
+WITH new_table AS (
+    SELECT 
+        d.name AS Department,
+        e.name AS Employee,
+        e.salary AS Salary,
+        DENSE_RANK() OVER(PARTITION BY d.name ORDER BY e.salary DESC) AS ranking
+    FROM Employee e
+    LEFT JOIN Department d
+    ON e.departmentId = d.id
+)
+SELECT Department, Employee, Salary
+FROM new_table
+WHERE ranking <= 3;
+
+
+
+-- Of course. Let's break down DENSE_RANK() and the entire window function from that query. It's an incredibly powerful tool for solving "top-N-per-group" problems.
+
+-- DENSE_RANK() is a window function that assigns a rank to each row within a partition of a result set. The key features that make it special are:
+
+-- No Gaps in Ranking: If two or more rows have the same value (a tie), they receive the same rank, and the next rank is the very next consecutive number. It never skips ranks.
+
+-- Requires an OVER() clause: Like all window functions, it needs an OVER() clause to define how the ranking should be calculated.
+
+-- Let's look at the specific line from your query:
+-- DENSE_RANK() OVER(PARTITION BY d.name ORDER BY e.salary DESC)
+
+-- Breakdown of the OVER() Clause
+-- PARTITION BY d.name: This is the most important part for a "per-group" problem. It tells the function to divide the rows into separate "windows" or groups based on the department name (d.name). The ranking will be calculated independently for each department and will restart at 1 for each new department.
+
+-- Analogy: It's like telling the function to handle all the "Sales" employees first, rank them, then move on to the "Engineering" employees and start a fresh ranking from 1.
+
+-- ORDER BY e.salary DESC: This specifies how to rank the rows within each partition. In this case, it ranks the employees based on their salary in descending order (highest salary gets rank 1).
+
+-- DENSE_RANK() vs. RANK() (A Quick Example)
+-- The best way to understand DENSE_RANK() is to see it in action, especially compared to its cousin, RANK().
+
+-- Imagine this data for the "Sales" department:
+
+-- Employee	Salary	RANK()	DENSE_RANK()
+-- Max	90000	1	1
+-- Henry	85000	2	2
+-- Sam	85000	2	2
+-- Joe	70000	4	3
+
+-- Export to Sheets
+-- Notice the difference:
+
+-- Henry and Sam are tied for 2nd place. Both RANK() and DENSE_RANK() give them rank 2.
+
+-- The next employee is Joe. RANK() sees that two people took up the 2nd spot, so it skips rank 3 and gives Joe rank 4.
+
+-- DENSE_RANK() never skips. After the tie at rank 2, it assigns the very next number, 3, to Joe.
+
+-- For "top-N" problems where ties are involved (like finding the top 3 salaries), DENSE_RANK() is often exactly what you need because it ensures you get all employees at the 3rd highest salary level, even if there was a tie for 1st or 2nd.
