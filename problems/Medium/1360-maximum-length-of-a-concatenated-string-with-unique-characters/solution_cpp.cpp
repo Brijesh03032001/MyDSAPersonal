@@ -21,7 +21,7 @@ public:
         }
 
         // --- Path 1: Exclude the current string arr[ind] ---
-        int excludeLength = 0;
+        int excludeLength = solve(ind + 1, arr, charSet);
 
         // --- Path 2: Try to include the current string arr[ind] ---
         const string& currentStr = arr[ind];
@@ -50,11 +50,7 @@ public:
             for (char c : currentStr) {
                 charSet.erase(c);
             }
-            excludeLength = solve(ind + 1, arr, charSet);
-        }
-        else
-        {
-            excludeLength = solve(ind + 1, arr, charSet);
+            
         }
 
         // Return the maximum of the two paths
