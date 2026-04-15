@@ -1,76 +1,100 @@
 class Solution {
 public:
-    vector<int> sortItems(int n, int m, vector<int>& group, vector<vector<int>>& beforeItems) {
-        // group the isolated item by itself 
-        for(int i = 0; i < n; ++i){
-            if(group[i] == -1)
-                group[i] = m++;
-        }
-        
-        // build graph
-        vector<unordered_set<int>> graphGroup(m), graphItem(n);
-        vector<int> inGroup(m), inItem(n);
-        for(int i = 0; i < n; i++) {
-            int to_group = group[i];
-            for(int from : beforeItems[i]) {
-                int from_group = group[from];
-                if(from_group != to_group && !graphGroup[from_group].count(to_group)) {
-                    graphGroup[from_group].insert(to_group);
-                    inGroup[to_group]++;
-                }
-                if(!graphItem[from].count(i)) {
-                    graphItem[from].insert(i);
-                    inItem[i]++;
-                }
+    vector<int> toposort(vector<vector<int>>Adj, vector<int>Indegree)
+    {
+        queue<int> qu;
+        vector<int> re;
+        for(int i=0;i<Indegree.size();i++)
+        {
+            if(Indegree[i] == 0)
+            {
+                qu.push(i);
             }
         }
-        
-        // topo sort
-        vector<int> group_sorted = topoSort(graphGroup, inGroup);
-        vector<int> item_sorted = topoSort(graphItem, inItem);
-        
-        if(group_sorted.empty() || item_sorted.empty()) return {};
 
-        vector<vector<int>> group2item(m);
-        for(auto item : item_sorted){
-            group2item[group[item]].push_back(item);
+        while(!qu.empty())
+        {
+            int top = qu.front();
+            qu.pop();
+            re.push_back(top);
+           
+            for(auto it : Adj[top])
+            {
+              Indegree[it]--;
+                if(Indegree[it] == 0)
+                {
+                    qu.push(it);
+                }
+            } 
+        }
+
+        if(Indegree.size() == re.size())
+        {
+            return re;
         }
         
-        vector<int> ans;
-        for(int group_id : group_sorted) {
-            for(int item : group2item[group_id]) {
-                ans.push_back(item);
-            }
+        return vector<int>();
+    }
+    vector<int> sortItems(int n, int m, vector<int>& group, vector<vector<int>>& beforeItems) {
+
+    //total groups
+    for(int i=0;i<n;i++)
+    {
+       if(group[i] == -1)
+       {
+         group[i] = m++;
+       }
+    }
+    //make itemGraph as well as itemindree
+    vector<vector<int>>ItemAdj(n);
+    vector<int>ItemIndegree(n,0);
+    for(int i=0;i<n;i++)
+    {
+        for(auto prev : beforeItems[i])
+        {
+            ItemAdj[prev].push_back(i);
+            ItemIndegree[i]++;
         }
-        
-        return ans;
     }
     
-    vector<int> topoSort(vector<unordered_set<int>>& graph, vector<int>& indegree) {
-        vector<int> ans;
-        queue<int> q;
-        for(int i =  0; i <indegree.size(); i++) {
-            if(indegree[i] == 0) q.push(i);
+    //make groupGraph as well as groupIndegree
+    vector<vector<int>>GroupAdj(m);
+    vector<int>GroupInDegree(m,0);
+    for(int i=0;i<n;i++)
+    {
+        int groupOfI = group[i];
+        for(auto prev : beforeItems[i])
+        {
+            int groupOfprev = group[prev];
+            if(groupOfI != groupOfprev)
+            {
+                 GroupAdj[groupOfprev].push_back(groupOfI);
+                 GroupInDegree[groupOfI]++;
+            }  
         }
-        
-        while(!q.empty()) {
-            int t = q.front();
-            q.pop();
-            
-            ans.push_back(t);
-            
-            for(int next : graph[t]) {
-                --indegree[next];
-                if(indegree[next] == 0) {
-                    q.push(next);
-                }
-            }
-        }
-        
-        for(int i =  0; i < indegree.size(); i++) {
-            if(indegree[i] > 0) return {};
-        }
-        
-        return ans;
+    }
+    // retrieve the itemSOrt as well as groupSort
+    vector<int> itemSort = toposort(ItemAdj, ItemIndegree);
+    vector<int> groupSort = toposort(GroupAdj ,GroupInDegree);
+
+    
+
+  vector<vector<int>>InsideGroupItemArrange(m);
+  for(int it : itemSort)
+  {
+       int groupOfItem = group[it];
+       InsideGroupItemArrange[groupOfItem].push_back(it);
+  }
+  vector<int>result;
+  for(int grp : groupSort)
+  {
+       int si = InsideGroupItemArrange[grp].size();
+       for(int j=0;j<si;j++)
+       {
+        result.push_back(InsideGroupItemArrange[grp][j]);
+       }
+  }
+
+  return result;
     }
 };
