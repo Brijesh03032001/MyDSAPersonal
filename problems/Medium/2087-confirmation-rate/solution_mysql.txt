@@ -1,14 +1,11 @@
 
 select si.user_id , ifnull(
-
-    ROUND(COALESCE(
+ROUND(COALESCE(
     SUM(CASE WHEN con.action = 'confirmed' THEN 1 ELSE 0 END) * 1.0 / COUNT(con.action),
     0
-    ), 2)
-    
+  ), 2)
     ,0.00
-    
-    ) as confirmation_rate 
+       ) as confirmation_rate 
 from Signups si
 left join Confirmations con
 on si.user_id = con.user_id
