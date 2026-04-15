@@ -21,16 +21,14 @@ public:
                 {
                     
                     i++;
-                      c++;
                 }
                 else
                 {
                    
                     L = i;
                     i++;
-                      c++;
                 }
-              
+                c++;
             }
         }
         return c;
