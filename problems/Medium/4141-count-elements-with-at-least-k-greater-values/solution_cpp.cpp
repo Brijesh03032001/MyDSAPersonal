@@ -4,15 +4,15 @@ public:
         int n = nums.size();
         sort(nums.begin(), nums.end());
         
-        int count = 0;
+        int ans_count = 0;
         
         for (int i = 0; i < n; i++) {
-            // first element greater than nums[i]
+          
             int idx = upper_bound(nums.begin(), nums.end(), nums[i]) - nums.begin();
-            int greater = n - idx;
-            if (greater >= k) count++;
+            int an = n - idx;
+            if (an >= k) ans_count++;
         }
         
-        return count;
+        return ans_count;
     }
 };
