@@ -7,7 +7,7 @@ public:
     {
         // clamp profit for DP indexing: any profit <= 0 maps to 0
         int p = profit <= 0 ? 0 : profit;
-        // if (p > 100) p = 100; // defensive: ensure within array bounds
+        if (p > 100) p = 100; // defensive: ensure within array bounds
 
         if (le < 0) {
             return profit <= 0 ? 1 : 0;
