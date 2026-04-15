@@ -1,65 +1,43 @@
 class Solution {
 public:
-    bool isSubset(int w ,int n , vector<int>nums)
+    int dp[201][10001];
+    // anything above (100*200)/2 ; 
+    bool sol(vector<int>& arr, int W, int i)
     {
-      bool dp[n+1][w+1];
-      for(int i=0;i<n+1;i++)
-      {
-        for(int j=0;j<w+1;j++)
-        {
-          if(j==0)
-          {
-            dp[i][j]=true;
-          }
-          if(i==0 && j!=0)
-          {
-            dp[i][j]=false;
-          }
-        }
-      }
-      
-      for(int i=1;i<n+1;i++)
-      {
-        for(int j=1;j<w+1;j++)
-        {
-          if(nums[i-1]<=j)
-          {
-            dp[i][j] = dp[i-1][j] || dp[i-1][j- nums[i-1]];
-          }
-          else
-          {
-            dp[i][j]= dp[i-1][j];
-          }
-        }
-      }
-      return dp[n][w];
-    }
- 
-    bool canPartition(vector<int>& nums) {
-         long long int su=0;
-      for(int i=0;i<nums.size();i++)
-      {
-        su+=nums[i];
+        if(W <= 0) return true;
+        if(i == 0 ) return false;
         
-      }
-      int k=2;
-      if(su%k!=0)
-      {
-        return false;
-      }
-      else
-      {
-        int ref= su/k;
-        if(isSubset(ref,nums.size(),nums))
+        if(dp[i][W] != -1)
         {
-          return true;
+            return dp[i][W];
+        }
+        if(arr[i-1] > W)
+        {
+             return dp[i][W] = sol(arr, W, i-1);
+
         }
         else
         {
-          return false;
+             bool take = sol(arr, W - arr[i-1] , i-1);
+             bool not_take = sol(arr, W, i-1);
+             int res = take || not_take;
+             return dp[i][W] = res;
         }
-      }
-      
-      return false;
+        return false;
+    }
+    bool canPartition(vector<int>& nums) {
+          int n = nums.size();
+          int su =0;
+         for(int i=0;i<nums.size();i++)
+         {
+              su += nums[i];
+         }
+         if(su%2 != 0) return false;
+         else
+         {
+             memset(dp, -1, sizeof(dp));
+             return sol(nums, su/2, n);
+         }
+         return true;
     }
 };
