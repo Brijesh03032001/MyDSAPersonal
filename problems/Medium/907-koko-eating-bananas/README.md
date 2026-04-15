@@ -1,7 +1,7 @@
 # Koko Eating Bananas
 
 **Difficulty:** Medium  
-**URL:** [https://leetcode.com/problems/koko-eating-bananas](https://leetcode.com/problems/koko-eating-bananas)  
+**URL:** [https://leetcode.com/problems/koko-eating-bananas/](https://leetcode.com/problems/koko-eating-bananas/)  
 **Tags:** Array, Binary Search
 
 ---

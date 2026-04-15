@@ -5,7 +5,7 @@ public:
         long long ref_hour = 0;
         for(int i = 0; i < piles.size(); i++)
         {
-            ref_hour += (piles[i] + speed - 1) / speed;
+            ref_hour += ceil((double)piles[i] / speed);
         }
         return ref_hour <= h;
     }
