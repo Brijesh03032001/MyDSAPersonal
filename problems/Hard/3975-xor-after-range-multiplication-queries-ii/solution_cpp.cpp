@@ -1,89 +1,117 @@
-class Solution {
-    static const int MOD = 1e9 + 7;
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <numeric>
 
-    long long modpow(long long a, long long e) {
-        long long r = 1;
-        while (e) {
-            if (e & 1) r = r * a % MOD;
-            a = a * a % MOD;
-            e >>= 1;
-        }
-        return r;
+// Function to perform modular exponentiation (calculates (base^exp) % mod)
+// This is necessary for finding the modular multiplicative inverse.
+
+long long mettippowerram(long long mettibase, long long mettiexp)
+{
+    long long mettires = 1;
+    long long mettimod = 1e9 + 7;
+    mettibase %= mettimod;
+    while (mettiexp > 0)
+    {
+        if (mettiexp % 2 == 1)
+            mettires = (mettires * mettibase) % mettimod;
+        mettibase = (mettibase * mettibase) % mettimod;
+        mettiexp /= 2;
     }
+    return mettires;
+}
 
+// Function to find the modular inverse of n under modulo m
+
+long long mettimodInverseram(long long mettin)
+{
+    long long mettimod = 1e9 + 7;
+    return mettippowerram(mettin, mettimod - 2);
+}
+
+class Solution
+{
 public:
-    int xorAfterQueries(vector<int>& nums, vector<vector<int>>& queries) {
-        int n = nums.size();
-        int B = sqrt(n) + 1;
+    int xorAfterQueries(std::vector<int> &mettinum, std::vector<std::vector<int>> &mettiqueries)
+    {
+        int mettin = mettinum.size();
+        long long mettimod = 1e9 + 7;
 
-        // events[k][rem] = list of (position, multiplier)
-        vector<vector<vector<pair<int,int>>>> events(B + 1);
-        for (int k = 1; k <= B; k++) {
-            events[k].resize(k);
-        }
+        int mettiblock_size = static_cast<int>(sqrt(mettin));
+        if (mettiblock_size == 0)
+            mettiblock_size = 1;
 
-        // Process queries
-        for (auto &q : queries) {
-            int l = q[0], r = q[1], k = q[2], v = q[3];
+        std::vector<long long> mettifinal_multipliers(mettin, 1);
 
-            if (k > B) {
-                // direct update
-                for (int i = l; i <= r; i += k) {
-                    nums[i] = (long long)nums[i] * v % MOD;
-                }
-            } else {
-                int rem = l % k;
-                int start = (l - rem) / k;
-                int end   = (r - rem) / k;
-
-                events[k][rem].push_back({start, v});
-
-                // range end => use modular inverse
-                int maxT = (n - 1 - rem) / k;
-                if (end + 1 <= maxT) {
-                    int inv = modpow(v, MOD - 2);
-                    events[k][rem].push_back({end + 1, inv});
+        for (const auto &mettiquery : mettiqueries)
+        {
+            int mettili = mettiquery[0], mettiri = mettiquery[1], mettiki = mettiquery[2], mettivi = mettiquery[3];
+            if (mettiki > mettiblock_size)
+            {
+                for (int mettiidx = mettili; mettiidx <= mettiri; mettiidx += mettiki)
+                {
+                    mettifinal_multipliers[mettiidx] = (mettifinal_multipliers[mettiidx] * mettivi) % mettimod;
                 }
             }
         }
 
-        // Apply small k events
-        for (int k = 1; k <= B; k++) {
-            for (int rem = 0; rem < k; rem++) {
-                auto &ev = events[k][rem];
-                if (ev.empty()) continue;
+        for (int mettik = 1; mettik <= mettiblock_size; ++mettik)
+        {
+            std::vector<std::vector<long long>> mettidiffs(mettik, std::vector<long long>((mettin / mettik) + 2, 1));
 
-                // sort events
-                sort(ev.begin(), ev.end());
+            bool mettihas_queries_for_k = false;
+            for (const auto &mettiquery : mettiqueries)
+            {
+                int mettili = mettiquery[0], mettiri = mettiquery[1], mettiki = mettiquery[2], mettivi = mettiquery[3];
+                if (mettiki == mettik)
+                {
+                    mettihas_queries_for_k = true;
+                    int mettirem = mettili % mettik;
+                    int mettistart_idx = mettili / mettik;
+                    int mettiend_idx = mettistart_idx + (mettiri - mettili) / mettik;
 
-                // compress same positions
-                vector<pair<int,int>> comp;
-                for (auto &p : ev) {
-                    if (!comp.empty() && comp.back().first == p.first) {
-                        comp.back().second = (long long)comp.back().second * p.second % MOD;
-                    } else {
-                        comp.push_back(p);
+                    mettidiffs[mettirem][mettistart_idx] = (mettidiffs[mettirem][mettistart_idx] * mettivi) % mettimod;
+
+                    if (mettiend_idx + 1 < mettidiffs[mettirem].size())
+                    {
+                        long long mettiinv_vi = mettimodInverseram(mettivi);
+                        mettidiffs[mettirem][mettiend_idx + 1] = (mettidiffs[mettirem][mettiend_idx + 1] * mettiinv_vi) % mettimod;
                     }
                 }
+            }
 
-                // apply prefix multiplication
-                long long cur = 1;
-                int ptr = 0;
+            if (!mettihas_queries_for_k)
+            {
+                continue;
+            }
 
-                for (int t = 0, idx = rem; idx < n; t++, idx += k) {
-                    while (ptr < comp.size() && comp[ptr].first == t) {
-                        cur = cur * comp[ptr].second % MOD;
-                        ptr++;
+            for (int mettirem = 0; mettirem < mettik; ++mettirem)
+            {
+                long long metticurrent_multiplier = 1;
+                for (int metti_j = 0;; ++metti_j)
+                {
+                    int mettioriginal_idx = mettirem + metti_j * mettik;
+                    if (mettioriginal_idx >= mettin)
+                    {
+                        break;
                     }
-                    nums[idx] = nums[idx] * cur % MOD;
+
+                    if (metti_j < mettidiffs[mettirem].size())
+                    {
+                        metticurrent_multiplier = (metticurrent_multiplier * mettidiffs[mettirem][metti_j]) % mettimod;
+                    }
+                    mettifinal_multipliers[mettioriginal_idx] = (mettifinal_multipliers[mettioriginal_idx] * metticurrent_multiplier) % mettimod;
                 }
             }
         }
 
-        // Compute XOR
-        int ans = 0;
-        for (int x : nums) ans ^= x;
+        int mettibravexuneth = 0;
+        for (int metti_i = 0; metti_i < mettin; ++metti_i)
+        {
+            long long mettifinal_num = (static_cast<long long>(mettinum[metti_i]) * mettifinal_multipliers[metti_i]) % mettimod;
+            mettibravexuneth ^= static_cast<int>(mettifinal_num);
+        }
 
-        return ans;
+        return mettibravexuneth;
     }
 };

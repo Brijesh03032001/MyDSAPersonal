@@ -1,7 +1,7 @@
 # XOR After Range Multiplication Queries II
 
 **Difficulty:** Hard  
-**URL:** [https://leetcode.com/problems/xor-after-range-multiplication-queries-ii](https://leetcode.com/problems/xor-after-range-multiplication-queries-ii)  
+**URL:** [https://leetcode.com/problems/xor-after-range-multiplication-queries-ii/](https://leetcode.com/problems/xor-after-range-multiplication-queries-ii/)  
 **Tags:** Array, Divide and Conquer
 
 ---
