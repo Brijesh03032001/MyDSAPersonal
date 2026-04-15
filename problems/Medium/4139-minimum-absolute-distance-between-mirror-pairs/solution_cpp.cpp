@@ -1,6 +1,6 @@
 class Solution {
 public:
-    
+    // reverse digits of a non-negative integer, dropping leading zeros after reversing
     long long reverseInt(long long x) {
         long long r = 0;
         while (x > 0) {
@@ -11,18 +11,18 @@ public:
     }
 
     int minMirrorPairDistance(vector<int>& nums) {
-        int n = nums.size();
-        
-        int ans = INT_MAX;
+        int n = (int)nums.size();
+        const int INF = 1e9;
+        int ans = INF;
 
        
-        unordered_map<long long, int> revse;
-        revse.reserve(n * 2);
+        unordered_map<long long, int> seenRevIndex;
+        seenRevIndex.reserve(n * 2);
 
         for (int j = 0; j < n; ++j) {
             
-            auto it = revse.find(nums[j]);
-            if (it != revse.end()) {
+            auto it = seenRevIndex.find(nums[j]);
+            if (it != seenRevIndex.end()) {
                 int i = it->second;      
                 ans = min(ans, j - i);
                 if (ans == 1) return 1;    
@@ -31,9 +31,9 @@ public:
            
             long long rev_j = reverseInt(nums[j]);
             
-            revse[rev_j] = j;
+            seenRevIndex[rev_j] = j;
         }
 
-        return (ans == INT_MAX ? -1 : ans);
+        return (ans == INF ? -1 : ans);
     }
 };
