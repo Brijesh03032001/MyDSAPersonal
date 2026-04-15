@@ -19,8 +19,14 @@ public:
             }
             else if(height[p1] == height[p2])
             {
-                p2--;
-                p1++;
+                if(height[p1+1] < height[p2-1] )
+                {
+                    p2--;
+                }
+                else if(height[p1+1] >= height[p2-1])
+                {
+                    p1++;
+                }
                
             }
 
