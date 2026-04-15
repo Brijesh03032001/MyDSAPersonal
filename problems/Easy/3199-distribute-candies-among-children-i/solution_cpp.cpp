@@ -6,10 +6,12 @@ public:
         {
             for(int j=0;j<=limit;j++)
             {
-                int k = n - i - j;
-                if(k>= 0 && k<=limit)
+                for(int k=0;k<=limit;k++)
                 {
-                    co++;
+                    if(i+j+k == n)
+                    {
+                        co++;
+                    }
                 }
             }
         }
