@@ -3,7 +3,7 @@ public:
     int mySqrt(int x) {
         if(x == 0) return 0;
         int l=1;
-        int h = min((long long)x, (long long)pow(x, 1.0/2) + 2);
+        int h = x;
         int ans = -1;
         while(l <= h)
         {
