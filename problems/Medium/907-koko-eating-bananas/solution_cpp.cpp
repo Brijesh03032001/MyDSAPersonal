@@ -7,11 +7,7 @@ public:
         {
             ref_hour += ceil((double)piles[i] / speed);
         }
-        if(ref_hour <= h)
-        {
-            return true;
-        }
-        return false;
+        return ref_hour <= h;
     }
 
     int minEatingSpeed(vector<int>& piles, int h) {
