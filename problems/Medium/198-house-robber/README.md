@@ -1,7 +1,7 @@
 # House Robber
 
 **Difficulty:** Medium  
-**URL:** [https://leetcode.com/problems/house-robber](https://leetcode.com/problems/house-robber)  
+**URL:** [https://leetcode.com/problems/house-robber/](https://leetcode.com/problems/house-robber/)  
 **Tags:** Array, Dynamic Programming
 
 ---
