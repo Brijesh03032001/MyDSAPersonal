@@ -22,17 +22,14 @@ public:
                 int ref = pq.top();
                 pq.pop();
                 ref--;
-                temp.push_back(ref);
+                if(ref > 0) temp.push_back(ref);
                 c++;
             }
 
-            for(int x : temp) 
-            {
-                if(x>0) pq.push(x);
-            }    
+            for(int x : temp) pq.push(x);
 
             if(pq.empty())
-                ans += temp.size();
+                ans += c;
             else
                 ans += (n+1);
         }
