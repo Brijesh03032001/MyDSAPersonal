@@ -1,5 +1,11 @@
-// LeetCode submission — code could not be fetched automatically.
-// To fill this in, open the submission on LeetCode and paste your code here.
-// Submission key: triangle__1758778935
-// Language: cpp
-// Status: Accepted
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        for (int i = triangle.size() - 2; i >= 0; i--)
+            for (int j = 0; j < triangle[i].size(); j++)
+                triangle[i][j] +=
+                    min(triangle[i + 1][j], triangle[i + 1][j + 1]);
+
+        return triangle[0][0];
+    }
+};
