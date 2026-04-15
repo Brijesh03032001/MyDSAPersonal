@@ -1,0 +1,18 @@
+# Write your MySQL query statement below
+with friend_count as (
+    select requester_id as id, count(accepter_id) as count_fri
+    from RequestAccepted
+    group by requester_id
+
+    UNION ALL
+
+    select accepter_id as id, count(requester_id) as count_fri
+    from RequestAccepted
+    group by accepter_id
+
+)
+select id , SUM(count_fri) as num
+from friend_count
+group by id
+order by SUM(count_fri) DESC
+limit 1 ;
