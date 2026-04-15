@@ -1,0 +1,15 @@
+# Write your MySQL query statement below
+with ref as 
+(select product_id ,
+       year,
+       min(year) OVER(PARTITION BY product_id) AS first_ref,
+       quantity,
+       price
+from Sales   )
+
+select product_id,
+       first_ref as first_year,
+       quantity,
+       price
+from ref
+where year = first_ref
