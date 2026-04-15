@@ -1,7 +1,7 @@
 # Shortest Path in Binary Matrix
 
 **Difficulty:** Medium  
-**URL:** [https://leetcode.com/problems/shortest-path-in-binary-matrix](https://leetcode.com/problems/shortest-path-in-binary-matrix)  
+**URL:** [https://leetcode.com/problems/shortest-path-in-binary-matrix/](https://leetcode.com/problems/shortest-path-in-binary-matrix/)  
 **Tags:** Array, Breadth-First Search, Matrix
 
 ---

@@ -4,7 +4,7 @@ public:
         int n = grid.size();
 
         if(grid[0][0] != 0) return -1;
-        if(n == 1) return 1;
+        if(n == 1 && grid[0][0] == 0) return 1;
 
         queue<pair<int,int>> qu;
         qu.push({0,0});
@@ -23,9 +23,10 @@ public:
 
             for(int i = 0; i < qsize; i++)
             {
-                auto [x, y] = qu.front();
+                pair<int,int> pa= qu.front();
                 qu.pop();
-
+                int x = pa.first;
+                int y = pa.second;
                 for(auto &d : dir)
                 {
                     int nx = x + d.first;
