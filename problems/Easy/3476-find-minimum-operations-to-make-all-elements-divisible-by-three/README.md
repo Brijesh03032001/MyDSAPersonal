@@ -1,0 +1,64 @@
+# Find Minimum Operations to Make All Elements Divisible by Three
+
+**Difficulty:** Easy  
+**URL:** [https://leetcode.com/problems/find-minimum-operations-to-make-all-elements-divisible-by-three/](https://leetcode.com/problems/find-minimum-operations-to-make-all-elements-divisible-by-three/)  
+**Tags:** Array, Math
+
+---
+
+## My Notes
+
+<!-- Add your personal notes here -->
+
+## Time Complexity
+
+<!-- e.g. O(n log n) -->
+
+## Space Complexity
+
+<!-- e.g. O(n) -->
+
+---
+
+## Problem Statement
+
+You are given an integer array nums. In one operation, you can add or subtract 1 from any element of nums.
+
+Return the minimum number of operations to make all elements of nums divisible by 3.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,3,4]
+
+Output: 3
+
+Explanation:
+
+All array elements can be made divisible by 3 using 3 operations:
+
+	
+Subtract 1 from 1.
+
+	
+Add 1 to 2.
+
+	
+Subtract 1 from 4.
+
+Example 2:
+
+Input: nums = [3,6,9]
+
+Output: 0
+
+ 
+
+Constraints:
+
+	
+1 <= nums.length <= 50
+
+	
+1 <= nums[i] <= 50
