@@ -1,7 +1,7 @@
 # Integer Break
 
 **Difficulty:** Medium  
-**URL:** [https://leetcode.com/problems/integer-break](https://leetcode.com/problems/integer-break)  
+**URL:** [https://leetcode.com/problems/integer-break/](https://leetcode.com/problems/integer-break/)  
 **Tags:** Math, Dynamic Programming
 
 ---
