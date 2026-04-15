@@ -1,0 +1,22 @@
+# Write your MySQL query statement below
+SELECT *
+FROM Patients
+WHERE conditions REGEXP '(^| )DIAB1';
+
+
+-- Explanation of the Corrected Regex
+-- Let's break down this corrected pattern: (^| )DIAB1
+
+-- (...): This is a grouping. It groups expressions together.
+
+-- ^| : This is the most important part of the correction.
+
+-- ^: This is an anchor for the start of the string.
+
+-- |: This is the "OR" operator.
+
+--      : This is a literal space character.
+
+-- So, (^| ) means "match either the start of the string OR a space". This ensures that you are matching DIAB1 at the beginning of a word.
+
+-- DIAB1: By removing the brackets, you are now matching the literal sequence of characters "DIAB1".
