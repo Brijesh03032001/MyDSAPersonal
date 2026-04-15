@@ -1,7 +1,7 @@
 # Number of Provinces
 
 **Difficulty:** Medium  
-**URL:** [https://leetcode.com/problems/number-of-provinces](https://leetcode.com/problems/number-of-provinces)  
+**URL:** [https://leetcode.com/problems/number-of-provinces/](https://leetcode.com/problems/number-of-provinces/)  
 **Tags:** Depth-First Search, Breadth-First Search, Union-Find, Graph Theory
 
 ---
