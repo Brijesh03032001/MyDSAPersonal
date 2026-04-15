@@ -1,59 +1,62 @@
 class Solution {
 public:
-    int first(vector<int>&nums , int target , int n)
+    int fir(vector<int>&nums, int ta)
     {
-        int lo = 0;
-        int high = n-1;
+        int f = 0;
+        int l = nums.size()-1;
         int ans = -1;
-        
-        while(lo<=high)
+        while(f <= l)
         {
-            int mid = lo + (high-lo)/2;
-            if(nums[mid]<target)
-            {
-                lo=  mid+1;
-            }
-            else
-            {
-                if(nums[mid]== target) {
-                      ans = mid;
-                }
-               
-                high = mid -1;
-            }
+        int mid = (f + l)/2;
+        if(nums[mid] < ta)
+        {
+            f = mid + 1;
         }
-       
+        else
+        {
+             if(nums[mid] == ta)
+            {
+            ans = mid;
+
+            }
+           
+            l = mid - 1;
+        }
+
+        }
         return ans;
     }
-    int last(vector<int>&nums , int target , int n)
+    int las(vector<int>&nums, int ta)
     {
-        int lo = 0;
-        int high = n-1;
+        int f = 0;
+        int l = nums.size()-1;
         int ans = -1;
-        
-        while(lo<=high)
+        while(f <= l)
         {
-            int mid = lo + (high-lo)/2;
-            if(nums[mid]<=target)
+        int mid = (f + l)/2;
+        if(nums[mid] <= ta)
+        {
+            if(nums[mid] == ta)
             {
-                if(nums[mid]== target)
-                {
-                    ans = mid;
-                }
-                lo=  mid+1;
+            ans = mid;
+
             }
-            else
-            {
-                high = mid -1;
-            }
+            f = mid + 1;
         }
-        
+        else
+        {
+            
+            l = mid - 1;
+        }
+
+        }
         return ans;
     }
     vector<int> searchRange(vector<int>& nums, int target) {
-        vector<int>res;
-        res.push_back(first(nums,target,nums.size()));
-        res.push_back(last(nums, target, nums.size()));
-        return res;      
+        if(nums.size() == 0) return {-1,-1};
+        int f = fir(nums, target);
+        int l = las(nums, target);
+
+        return {f,l};
     }
 };
