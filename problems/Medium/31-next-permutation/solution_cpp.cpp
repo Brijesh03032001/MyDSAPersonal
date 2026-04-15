@@ -3,15 +3,6 @@ public:
     void nextPermutation(vector<int>& nums) {
         int n= nums.size();
         int st= n-1;
-        if(n == 2)
-        {
-            swap(nums[0], nums[1]);
-            return ;
-        }
-        if(n==1)
-        {
-            return ;
-        }
         for(int i=n-1;i>=1;i--)
         {
             if(nums[i] > nums[i-1])
