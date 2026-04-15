@@ -11,7 +11,7 @@ public:
                 break;
             }
         }
-       
+        cout << st;
         if(st == n-1){
             sort(nums.begin(), nums.end());
             return ;
