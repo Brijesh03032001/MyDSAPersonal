@@ -17,13 +17,26 @@ public:
             }
             else
             {
-                while(mp.find(nums[p2]) != mp.end())
+                p1 = mp[nums[p2]]+1;
+                for(auto it = mp.begin(); it != mp.end(); )
                 {
-                    mp.erase(nums[p1]);
-                    temp_su -= nums[p1];
-                    p1++;
+                        if(it->second < p1)
+                        {
+                            it = mp.erase(it);
+                        }
+                        else
+                        {
+                            ++it;
+                        }
                 }
-                mp[nums[p2]] = p2;
+                
+               
+                mp[nums[p2]]= p2;
+                temp_su =0;
+                for(int t = p1; t<p2;t++)
+                {
+                    temp_su += nums[t];
+                }
             }
             temp_su += nums[p2];
             if(p2-p1+1 == k)
