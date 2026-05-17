@@ -1,28 +1,29 @@
 class Solution {
 public:
-   bool can_place(int mid,
-                   vector<int>& position,
-                   int m)
+    bool can_place(int mid,vector<int>& position, int m )
     {
-        int count = 1;
-
-        int last = position[0];
-
-        for(int i = 1; i < position.size(); i++)
+        int te = m-1;
+        int n = position.size();
+        int start = position[0];
+        int i=1;
+        while(i < n)
         {
-            if(position[i] - last >= mid)
+            while(i < n && position[i] - start < mid)
             {
-                count++;
-
-                last = position[i];
+                i++;
             }
 
-            if(count >= m)
-            {
-                return true;
-            }
+            if(i == n) break;
+
+            te--;
+
+            if(te == 0) return true;
+
+            start = position[i];
+
+            i++;
         }
-
+        // if(te == 0) return true;
         return false;
     }
     int maxDistance(vector<int>& position, int m) {
