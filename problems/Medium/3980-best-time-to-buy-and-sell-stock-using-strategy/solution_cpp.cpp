@@ -28,7 +28,7 @@ public:
         su_till_now += temp_su;
         original_su = max(original_su, su_till_now );
         // cout << original_su <<" ***";
-        // if(n<=2) return original_su;
+        if(n<=2) return original_su;
          for(int i=1;i<(n - (k) + 1);i++)
         {
             te = i + (k/2) - 1;
